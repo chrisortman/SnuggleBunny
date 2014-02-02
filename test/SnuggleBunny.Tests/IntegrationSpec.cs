@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Security.Cryptography;
 using Shouldly;
 using Xunit;
 
@@ -17,7 +18,7 @@ namespace SnuggleBunny.Tests
             var spendingReport = new SpendingReport();
             spendingReport.Load("transactions.csv");
 
-            IEnumerable<Overage> alerts = tool.Analyze(spendingReport);
+            var alerts = tool.Analyze(spendingReport);
 
             alerts.ShouldContain(
                 x => x.ToString() == "[OVERAGE] - Spending for clothing in Feb exceeded budget by $150.00 ($200.00/$350.00)");
@@ -39,20 +40,120 @@ namespace SnuggleBunny.Tests
                 spendingReport.AddTransaction(new DateTime(2014, 2, 2), "Gap", 201M, "clothing");
 
                 var alerts = tool.Analyze(spendingReport);
-                alerts.ShouldContain(new Overage("clothing",2,201M,200M));
+                alerts.ShouldContain(new CategorySpendingExceededAlert("clothing",2,201M,200M));
 
+            }
+
+            [Fact]
+            public void DetectsMonthsWhereSpendingExceedsMonthlyIncome()
+            {
+                var tool = new BudgetTool();
+                tool.MonthlyIncome(500M);
+
+                var spendingReport = new SpendingReport();
+                spendingReport.AddTransaction(new DateTime(2014,1,2),"Walmart",499M,"Grocery");
+                spendingReport.AddTransaction(new DateTime(2014,2,2),"Walmart",501M,"Grocery");
+
+                var alerts = tool.Analyze(spendingReport);
+
+                alerts.ShouldContain(new MonthlyIncomeExceededAlert(2,501M,500M));
             }
         }
     }
 
-    public struct Overage : IEquatable<Overage>
+    public interface IBudgetAlert 
     {
+        string Describe();
+    }
+    public class MonthlyIncomeExceededAlert : IEquatable<MonthlyIncomeExceededAlert>, IBudgetAlert
+    {
+        private readonly int _month;
+        private readonly decimal _spent;
+        private readonly decimal _available;
+
+        public MonthlyIncomeExceededAlert(int month, decimal spent, decimal available)
+        {
+            _month = month;
+            _spent = spent;
+            _available = available;
+        }
+
+        public int Month
+        {
+            get { return _month; }
+        }
+
+        public decimal Spent
+        {
+            get { return _spent; }
+        }
+
+        public decimal Available
+        {
+            get { return _available; }
+        }
+
+        public bool Equals(MonthlyIncomeExceededAlert other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return _month == other._month && _spent == other._spent && _available == other._available;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((MonthlyIncomeExceededAlert) obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hashCode = _month;
+                hashCode = (hashCode*397) ^ _spent.GetHashCode();
+                hashCode = (hashCode*397) ^ _available.GetHashCode();
+                return hashCode;
+            }
+        }
+
+        public static bool operator ==(MonthlyIncomeExceededAlert left, MonthlyIncomeExceededAlert right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(MonthlyIncomeExceededAlert left, MonthlyIncomeExceededAlert right)
+        {
+            return !Equals(left, right);
+        }
+
+        public string Describe()
+        {
+            return ToString();
+        }
+
+        public override string ToString()
+        {
+            return String.Format("[SPENDING] - Spending for {0} exceeded monthly income by {1:C} ({2:C}/{3:C})",
+               CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(Month),
+               Spent - Available,
+               Available,
+               Spent);
+        }
+    }
+
+
+    public struct CategorySpendingExceededAlert : IEquatable<CategorySpendingExceededAlert>, IBudgetAlert
+    {
+
         public string Category { get; private set; }
         public int Month { get; private set; }
         public decimal Spent { get; private set;}
         public decimal Alloted { get; private set; }
 
-        public Overage(string category, int month, decimal spent, decimal alloted) : this()
+        public CategorySpendingExceededAlert(string category, int month, decimal spent, decimal alloted) : this()
         {
             Guard.AgainstNull(category,"category");
 
@@ -62,7 +163,7 @@ namespace SnuggleBunny.Tests
             Alloted = alloted;
         }
 
-        public bool Equals(Overage other)
+        public bool Equals(CategorySpendingExceededAlert other)
         {
             return string.Equals(Category, other.Category) && Month == other.Month && Spent == other.Spent && Alloted == other.Alloted;
         }
@@ -70,7 +171,7 @@ namespace SnuggleBunny.Tests
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
-            return obj is Overage && Equals((Overage) obj);
+            return obj is CategorySpendingExceededAlert && Equals((CategorySpendingExceededAlert) obj);
         }
 
         public override int GetHashCode()
@@ -85,15 +186,16 @@ namespace SnuggleBunny.Tests
             }
         }
 
-        public static bool operator ==(Overage left, Overage right)
+        public static bool operator ==(CategorySpendingExceededAlert left, CategorySpendingExceededAlert right)
         {
             return left.Equals(right);
         }
 
-        public static bool operator !=(Overage left, Overage right)
+        public static bool operator !=(CategorySpendingExceededAlert left, CategorySpendingExceededAlert right)
         {
             return !left.Equals(right);
         }
+
 
         public override string ToString()
         {
@@ -103,6 +205,11 @@ namespace SnuggleBunny.Tests
                                   Math.Abs(Alloted-Spent),
                                   Alloted,
                                   Spent);
+        }
+
+        public string Describe()
+        {
+            return ToString();
         }
     }
 
@@ -143,6 +250,8 @@ namespace SnuggleBunny.Tests
     public class BudgetTool
     {
         private readonly List<SpendingCategory> _categories = new List<SpendingCategory>();
+        private decimal _monthlyIncome;
+
         public BudgetTool(string configFile)
         {
             
@@ -153,7 +262,7 @@ namespace SnuggleBunny.Tests
             
         }
 
-        public IEnumerable<Overage> Analyze(SpendingReport spendingReport)
+        public IEnumerable<IBudgetAlert> Analyze(SpendingReport spendingReport)
         {
             var spendingByCategoryMonth = 
                 from transaction in spendingReport.Transactions()
@@ -176,9 +285,30 @@ namespace SnuggleBunny.Tests
             var overages = from spent in spendingByCategoryMonth
                 join cat in _categories on spent.Group.Category equals cat.Name
                 where spent.Total > cat.Limit
-                select new Overage(cat.Name, spent.Group.Month, spent.Total, cat.Limit);
+                select new CategorySpendingExceededAlert(cat.Name, spent.Group.Month, spent.Total, cat.Limit);
 
-            return overages;
+
+            var spendingByMonth =
+                from transaction in spendingReport.Transactions()
+                group transaction by
+                    new
+                    {
+                        Year = transaction.OccurredOn.Year,
+                        Month = transaction.OccurredOn.Month,
+                    }
+                into byMonth
+                select new
+                {
+                    Group = byMonth.Key,
+                    Total = byMonth.Sum(x => x.Amount)
+                };
+
+            var exceeded =
+                from spent in spendingByMonth
+                where spent.Total > _monthlyIncome
+                select new MonthlyIncomeExceededAlert(spent.Group.Month, spent.Total, _monthlyIncome);
+
+            return overages.Cast<IBudgetAlert>().Union(exceeded);
         }
 
         public void DefineCategory(string clothing, decimal limit)
@@ -188,6 +318,11 @@ namespace SnuggleBunny.Tests
                 Name = clothing,
                 Limit = limit,
             });
+        }
+
+        public void MonthlyIncome(decimal amount)
+        {
+            _monthlyIncome = amount;
         }
     }
 
