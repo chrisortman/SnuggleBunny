@@ -1,14 +1,15 @@
 using System.Collections.Generic;
+using YamlDotNet.RepresentationModel;
 
 namespace SnuggleBunny.Budget.Config
 {
     public class BudgetConfig
     {
-        private readonly List<SpendingCategory> _categories = new List<SpendingCategory>();
+        private readonly Dictionary<string,SpendingCategory> _categories = new Dictionary<string, SpendingCategory>();
 
         public void DefineCategory(string categoryName, decimal limit)
         {
-            _categories.Add(new SpendingCategory()
+            _categories.Add(categoryName,new SpendingCategory()
             {
                 Name = categoryName,
                 Limit = limit,
@@ -17,9 +18,16 @@ namespace SnuggleBunny.Budget.Config
 
         public decimal MonthlyIncome { get; set; }
 
-        public List<SpendingCategory> Categories
+        public Dictionary<string,SpendingCategory> Categories
         {
             get { return _categories; }
+        }
+
+        public void LoadFile(string configFile)
+        {
+            
+            DefineCategory("grocery",500M);
+            DefineCategory("clothing",200M);
         }
     }
 }

@@ -11,7 +11,7 @@ namespace SnuggleBunny.Budget.Analyzers
 
         public void Initialize(BudgetConfig config)
         {
-            _categories = config.Categories;
+            _categories = config.Categories.Values.ToList();
         }
 
         public IEnumerable<ISpendingAlert> Analyze(ActivityReport activityReport)

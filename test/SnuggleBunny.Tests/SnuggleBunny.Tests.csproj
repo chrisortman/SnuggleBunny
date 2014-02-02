@@ -37,6 +37,7 @@
       <HintPath>..\..\packages\Shouldly.1.1.1.1\lib\35\Shouldly.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -54,14 +55,22 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BudgetToolTests.cs" />
+    <Compile Include="Activity\ActivityReportLoaderTests.cs" />
+    <Compile Include="Budget\BudgetToolTests.cs" />
+    <Compile Include="Budget\Config\BudgetConfigLoaderTests.cs" />
     <Compile Include="IntegrationTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="TestData\invalid_config.yml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="TestData\budget_config.yml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="TestData\invalid_transactions.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="TestData\transactions.csv">

@@ -12,9 +12,9 @@ namespace SnuggleBunny.Tests
         [Fact]
         public void DetectsOverespendingInACategory()
         {
-            var tool = new BudgetTool("budget_config.yml");
+            var tool = new BudgetTool(@"TestData\budget_config.yml");
             var spendingReport = new ActivityReport();
-            spendingReport.Load("transactions.csv");
+            spendingReport.Load(@"TestData\transactions.csv");
 
             var alerts = tool.Analyze(spendingReport);
 
