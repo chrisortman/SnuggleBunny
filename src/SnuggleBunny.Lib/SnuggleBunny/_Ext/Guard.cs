@@ -6,6 +6,11 @@ namespace SnuggleBunny
     [DebuggerStepThrough]
     public static class Guard
     {
+        /// <summary>
+        /// Prevents the given assertion from ocurring
+        /// </summary>
+        /// <param name="assertion"></param>
+        /// <param name="message"></param>
         [AssertionMethod]
         public static void Against([AssertionCondition(AssertionConditionType.IS_FALSE)] bool assertion, string message)
         {
@@ -15,6 +20,12 @@ namespace SnuggleBunny
             }
         }
 
+        /// <summary>
+        /// Prevents the given assertion from ocurring
+        /// </summary>
+        /// <typeparam name="EX">Type of exception to raise on error</typeparam>
+        /// <param name="assertion"></param>
+        /// <param name="message"></param>
         [AssertionMethod]
         public static void Against<EX>([AssertionCondition(AssertionConditionType.IS_FALSE)] bool assertion,
                                        string message) where EX : Exception
@@ -26,7 +37,7 @@ namespace SnuggleBunny
         }
 
         /// <summary>
-        /// 
+        /// Verifies that the given ondition is true
         /// </summary>
         /// <typeparam name="EX"></typeparam>
         /// <param name="assertion"></param>
@@ -42,7 +53,7 @@ namespace SnuggleBunny
         }
 
         /// <summary>
-        /// 
+        /// Verifies that the given ondition is true
         /// </summary>
         /// <typeparam name="EX"></typeparam>
         /// <param name="assertion"></param>
@@ -56,6 +67,12 @@ namespace SnuggleBunny
             }
         }
 
+        /// <summary>
+        /// Verifies the given object is not null
+        /// </summary>
+        /// <param name="o"></param>
+        /// <param name="paramName"></param>
+        /// <param name="message"></param>
         [AssertionMethod]
         public static void AgainstNull([AssertionCondition(AssertionConditionType.IS_NOT_NULL)] object o,
                                        string paramName, string message = null)

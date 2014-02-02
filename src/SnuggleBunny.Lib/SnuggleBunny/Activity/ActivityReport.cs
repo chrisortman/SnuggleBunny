@@ -4,6 +4,7 @@ using System.Linq;
 
 namespace SnuggleBunny.Activity
 {
+
     public class ActivityReport
     {
         private List<FinancialTransaction> _transactions = new List<FinancialTransaction>(); 
