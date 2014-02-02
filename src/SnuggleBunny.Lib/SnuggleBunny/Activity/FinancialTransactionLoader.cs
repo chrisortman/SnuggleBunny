@@ -9,6 +9,8 @@ namespace SnuggleBunny.Activity
     {
         public IEnumerable<FinancialTransaction> LoadFile(string fileName)
         {
+            var parser = new FinancialTransactionCsvParser();
+
             if (File.Exists(fileName))
             {
                 using (var file = new StreamReader(fileName))
@@ -16,39 +18,20 @@ namespace SnuggleBunny.Activity
                     string line = null;
                     while ((line = file.ReadLine()) != null)
                     {
-                        Exception parsingError = null;
-                        try
+                        FinancialTransaction parsedTransaction = null;
+                        if (parser.TryParseLine(line, out parsedTransaction))
                         {
-                            FinancialTransaction parsedTransaction = null;
-                            try
-                            {
-                                var parts = line.Split(',');
-                                var occurredOn = DateTime.Parse(parts[0]);
-                                var amount = Decimal.Parse(parts[2]);
-
-                                parsedTransaction = new FinancialTransaction()
-                                {
-                                    OccurredOn = occurredOn,
-                                    Description = parts[0],
-                                    Amount = amount,
-                                    Category = parts[3]
-                                };
-                            }
-                            catch (Exception ex)
-                            {
-                                parsingError = ex;
-                                throw;
-                            }
-
                             yield return parsedTransaction;
                         }
-                        finally
+                        else
                         {
-                            if (parsingError != null)
-                            {
-                                throw new ConfigurationErrorsException("Invalid transaction file", parsingError);
-                            }
+                            break;
                         }
+                    }
+
+                    if (!parser.ErrorMessage.IsBlank())
+                    {
+                        throw new ConfigurationErrorsException("Invalid transaction file");
                     }
                 }
             }
