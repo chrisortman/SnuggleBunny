@@ -1,15 +1,16 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using SnuggleBunny.Activity;
 using SnuggleBunny.Budget.Analyzers;
 using SnuggleBunny.Budget.Config;
+using SnuggleBunny.Budget.Config.Builders;
 
 namespace SnuggleBunny.Budget
 {
     public class BudgetTool
     {
-        private BudgetConfig _config = new BudgetConfig();
-       
+        private readonly BudgetConfig _config;
 
         public BudgetTool(string configFile)
         {
@@ -18,7 +19,7 @@ namespace SnuggleBunny.Budget
 
         public BudgetTool()
         {
-            
+            _config = new BudgetConfig();
         }
 
         public IEnumerable<ISpendingAlert> Analyze(ActivityReport activityReport)
@@ -35,14 +36,10 @@ namespace SnuggleBunny.Budget
 
         }
 
-        public void DefineCategory(string clothing, decimal limit)
+        public void Configure(Action<BudgetConfigBuilder> action)
         {
-            _config.DefineCategory(clothing,limit);
-        }
-
-        public void MonthlyIncome(decimal amount)
-        {
-            _config.IncomePerMonth(amount);
+            var builder = new BudgetConfigBuilder(_config);
+            action(builder);
         }
     }
 }
