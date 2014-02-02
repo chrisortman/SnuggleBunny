@@ -247,10 +247,118 @@ namespace SnuggleBunny.Tests
 
     }
 
-    public class BudgetTool
+    public interface ISpendingAnalyzer
+    {
+        void Initialize(BudgetConfig config);
+        IEnumerable<IBudgetAlert> Analyze(SpendingReport spendingReport);
+    }
+
+    public class OverspendInCategoryForMonthAnalyzer : ISpendingAnalyzer
+    {
+        private List<SpendingCategory> _categories;
+
+        public void Initialize(BudgetConfig config)
+        {
+            _categories = config.Categories;
+        }
+
+        public IEnumerable<IBudgetAlert> Analyze(SpendingReport spendingReport)
+        {
+            var spendingByCategoryMonth =
+               from transaction in spendingReport.Transactions()
+               group transaction by
+                   new
+                   {
+                       Year = transaction.OccurredOn.Year,
+                       Month = transaction.OccurredOn.Month,
+                       Category = transaction.Category
+                   }
+                   into byMonth
+                   select new
+                   {
+                       Group = byMonth.Key,
+                       Total = byMonth.Sum(x => x.Amount)
+                   };
+
+
+
+            var overages = from spent in spendingByCategoryMonth
+                           join cat in _categories on spent.Group.Category equals cat.Name
+                           where spent.Total > cat.Limit
+                           select new CategorySpendingExceededAlert(cat.Name, spent.Group.Month, spent.Total, cat.Limit);
+
+            return overages.Cast<IBudgetAlert>();
+        }
+    }
+
+    public class BudgetConfig
     {
         private readonly List<SpendingCategory> _categories = new List<SpendingCategory>();
         private decimal _monthlyIncome;
+
+        public void DefineCategory(string clothing, decimal limit)
+        {
+            _categories.Add(new SpendingCategory()
+            {
+                Name = clothing,
+                Limit = limit,
+            });
+        }
+
+        public void IncomePerMonth(decimal amount)
+        {
+            _monthlyIncome = amount;
+        }
+
+        public decimal MonthlyIncome
+        {
+            get { return _monthlyIncome; }
+        }
+
+        public List<SpendingCategory> Categories
+        {
+            get { return _categories; }
+        }
+    }
+
+    public class MonthlySpendingVersusIncomeAnalyzer : ISpendingAnalyzer
+    {
+        private decimal _monthlyIncome;
+
+        public void Initialize(BudgetConfig config)
+        {
+            _monthlyIncome = config.MonthlyIncome;
+        }
+
+        public IEnumerable<IBudgetAlert> Analyze(SpendingReport spendingReport)
+        {
+            var spendingByMonth =
+             from transaction in spendingReport.Transactions()
+             group transaction by
+                 new
+                 {
+                     Year = transaction.OccurredOn.Year,
+                     Month = transaction.OccurredOn.Month,
+                 }
+                 into byMonth
+                 select new
+                 {
+                     Group = byMonth.Key,
+                     Total = byMonth.Sum(x => x.Amount)
+                 };
+
+            var exceeded =
+                from spent in spendingByMonth
+                where spent.Total > _monthlyIncome
+                select new MonthlyIncomeExceededAlert(spent.Group.Month, spent.Total, _monthlyIncome);
+
+            return exceeded;
+        }
+    }
+    public class BudgetTool
+    {
+        private BudgetConfig _config = new BudgetConfig();
+       
 
         public BudgetTool(string configFile)
         {
@@ -264,65 +372,26 @@ namespace SnuggleBunny.Tests
 
         public IEnumerable<IBudgetAlert> Analyze(SpendingReport spendingReport)
         {
-            var spendingByCategoryMonth = 
-                from transaction in spendingReport.Transactions()
-                group transaction by
-                    new
-                    {
-                        Year = transaction.OccurredOn.Year,
-                        Month = transaction.OccurredOn.Month,
-                        Category = transaction.Category
-                    }
-                into byMonth
-                select new
-                {
-                    Group = byMonth.Key,
-                    Total = byMonth.Sum(x => x.Amount)
-                };
+            var analyzers = new List<ISpendingAnalyzer>
+            {
+                new OverspendInCategoryForMonthAnalyzer(),
+                new MonthlySpendingVersusIncomeAnalyzer(),
+            };
 
+            analyzers.ForEach(x => x.Initialize(_config));
 
+            return analyzers.SelectMany(x => x.Analyze(spendingReport));
 
-            var overages = from spent in spendingByCategoryMonth
-                join cat in _categories on spent.Group.Category equals cat.Name
-                where spent.Total > cat.Limit
-                select new CategorySpendingExceededAlert(cat.Name, spent.Group.Month, spent.Total, cat.Limit);
-
-
-            var spendingByMonth =
-                from transaction in spendingReport.Transactions()
-                group transaction by
-                    new
-                    {
-                        Year = transaction.OccurredOn.Year,
-                        Month = transaction.OccurredOn.Month,
-                    }
-                into byMonth
-                select new
-                {
-                    Group = byMonth.Key,
-                    Total = byMonth.Sum(x => x.Amount)
-                };
-
-            var exceeded =
-                from spent in spendingByMonth
-                where spent.Total > _monthlyIncome
-                select new MonthlyIncomeExceededAlert(spent.Group.Month, spent.Total, _monthlyIncome);
-
-            return overages.Cast<IBudgetAlert>().Union(exceeded);
         }
 
         public void DefineCategory(string clothing, decimal limit)
         {
-            _categories.Add(new SpendingCategory()
-            {
-                Name = clothing,
-                Limit = limit,
-            });
+           _config.DefineCategory(clothing,limit);
         }
 
         public void MonthlyIncome(decimal amount)
         {
-            _monthlyIncome = amount;
+            _config.IncomePerMonth(amount);
         }
     }
 
