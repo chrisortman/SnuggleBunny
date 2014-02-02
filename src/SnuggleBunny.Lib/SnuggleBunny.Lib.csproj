@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SnuggleBunny\Activity\FinancialTransactionCsvParser.cs" />
     <Compile Include="SnuggleBunny\Activity\FinancialTransactionLoader.cs" />
     <Compile Include="SnuggleBunny\Budget\Config\BudgetConfig.cs" />
     <Compile Include="SnuggleBunny\Budget\BudgetTool.cs" />

@@ -56,6 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Activity\ActivityReportLoaderTests.cs" />
+    <Compile Include="Activity\FinancialTransactionCsvParserTests.cs" />
     <Compile Include="Budget\BudgetToolTests.cs" />
     <Compile Include="Budget\Config\BudgetConfigLoaderTests.cs" />
     <Compile Include="IntegrationTest.cs" />
