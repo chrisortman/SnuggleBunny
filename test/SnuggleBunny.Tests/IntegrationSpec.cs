@@ -108,6 +108,7 @@ namespace SnuggleBunny.Tests
 
     public class SpendingReport
     {
+        private readonly List<SpendingTransaction> _transactions = new List<SpendingTransaction>(); 
         public void Load(string transactionData)
         {
             
@@ -115,12 +116,33 @@ namespace SnuggleBunny.Tests
 
         public void AddTransaction(DateTime dateTime, string description, decimal amount, string category)
         {
-            
+            _transactions.Add(new SpendingTransaction()
+            {
+                OccurredOn = dateTime,
+                Description = description,
+                Amount = amount,
+                Category = category,
+            });
         }
+
+        public IEnumerable<SpendingTransaction> Transactions()
+        {
+            return _transactions;
+        }
+    }
+
+    public class SpendingTransaction
+    {
+        public DateTime OccurredOn { get; set; }
+        public string Description { get; set; }
+        public Decimal Amount { get; set; }
+        public string Category { get; set; }
+
     }
 
     public class BudgetTool
     {
+        private readonly List<SpendingCategory> _categories = new List<SpendingCategory>();
         public BudgetTool(string configFile)
         {
             
@@ -133,12 +155,45 @@ namespace SnuggleBunny.Tests
 
         public IEnumerable<Overage> Analyze(SpendingReport spendingReport)
         {
-            yield return new Overage(category:"clothing",month:2,spent:201M,alloted:200M);
+            var spendingByCategoryMonth = 
+                from transaction in spendingReport.Transactions()
+                group transaction by
+                    new
+                    {
+                        Year = transaction.OccurredOn.Year,
+                        Month = transaction.OccurredOn.Month,
+                        Category = transaction.Category
+                    }
+                into byMonth
+                select new
+                {
+                    Group = byMonth.Key,
+                    Total = byMonth.Sum(x => x.Amount)
+                };
+
+
+
+            var overages = from spent in spendingByCategoryMonth
+                join cat in _categories on spent.Group.Category equals cat.Name
+                where spent.Total > cat.Limit
+                select new Overage(cat.Name, spent.Group.Month, spent.Total, cat.Limit);
+
+            return overages;
         }
 
         public void DefineCategory(string clothing, decimal limit)
         {
-            
+            _categories.Add(new SpendingCategory()
+            {
+                Name = clothing,
+                Limit = limit,
+            });
         }
+    }
+
+    public class SpendingCategory
+    { 
+        public string Name { get; set; }
+        public decimal Limit { get; set; }
     }
 }
