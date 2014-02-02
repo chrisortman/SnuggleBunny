@@ -14,7 +14,10 @@ namespace SnuggleBunny.Tests
             public void DetectsOverspendingInACategory()
             {
                 var tool = new BudgetTool();
-                tool.DefineCategory("clothing", limit: 200M);
+                tool.Configure(c =>
+                {
+                    c.Category("clothing").LimitTo(200M);
+                });
 
                 var spendingReport = new ActivityReport();
                 spendingReport.AddTransaction(new DateTime(2014, 2, 2), "Gap", 201M, "clothing");
@@ -28,7 +31,10 @@ namespace SnuggleBunny.Tests
             public void DetectsMonthsWhereSpendingExceedsMonthlyIncome()
             {
                 var tool = new BudgetTool();
-                tool.MonthlyIncome(500M);
+                tool.Configure(b =>
+                {
+                    b.IncomePerMonth(500M);
+                });
 
                 var spendingReport = new ActivityReport();
                 spendingReport.AddTransaction(new DateTime(2014,1,2),"Walmart",499M,"Grocery");

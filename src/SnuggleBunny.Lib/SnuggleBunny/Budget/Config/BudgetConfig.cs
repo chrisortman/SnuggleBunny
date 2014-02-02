@@ -5,26 +5,17 @@ namespace SnuggleBunny.Budget.Config
     public class BudgetConfig
     {
         private readonly List<SpendingCategory> _categories = new List<SpendingCategory>();
-        private decimal _monthlyIncome;
 
-        public void DefineCategory(string clothing, decimal limit)
+        public void DefineCategory(string categoryName, decimal limit)
         {
             _categories.Add(new SpendingCategory()
             {
-                Name = clothing,
+                Name = categoryName,
                 Limit = limit,
             });
         }
 
-        public void IncomePerMonth(decimal amount)
-        {
-            _monthlyIncome = amount;
-        }
-
-        public decimal MonthlyIncome
-        {
-            get { return _monthlyIncome; }
-        }
+        public decimal MonthlyIncome { get; set; }
 
         public List<SpendingCategory> Categories
         {

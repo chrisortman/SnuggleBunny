@@ -43,6 +43,8 @@
     <Compile Include="SnuggleBunny\Budget\Config\BudgetConfig.cs" />
     <Compile Include="SnuggleBunny\Budget\BudgetTool.cs" />
     <Compile Include="SnuggleBunny\Budget\CategorySpendingExceededAlert.cs" />
+    <Compile Include="SnuggleBunny\Budget\Config\Builders\BudgetConfigBuilder.cs" />
+    <Compile Include="SnuggleBunny\Budget\Config\Builders\CategoryBuilder.cs" />
     <Compile Include="SnuggleBunny\_Ext\FrameworkExtensions.cs" />
     <Compile Include="SnuggleBunny\_Ext\Guard.cs" />
     <Compile Include="SnuggleBunny\Budget\ISpendingAlert.cs" />
