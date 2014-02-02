@@ -1,5 +1,9 @@
 ﻿namespace SnuggleBunny
 {
+    /// <summary>
+    /// Encapsulates optional references. Prevent NULL refrence exceptions
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public struct Maybe<T>
     {
         public readonly static Maybe<T> Nothing = new Maybe<T>();

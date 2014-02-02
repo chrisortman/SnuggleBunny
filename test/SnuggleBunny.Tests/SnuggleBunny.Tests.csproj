@@ -59,6 +59,7 @@
     <Compile Include="Activity\FinancialTransactionCsvParserTests.cs" />
     <Compile Include="Budget\BudgetToolTests.cs" />
     <Compile Include="Budget\Config\BudgetConfigLoaderTests.cs" />
+    <Compile Include="Infrastructure\CsvReaderTests.cs" />
     <Compile Include="IntegrationTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestHelpers.cs" />
