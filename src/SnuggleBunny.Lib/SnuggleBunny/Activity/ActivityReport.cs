@@ -1,14 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SnuggleBunny.Activity
 {
     public class ActivityReport
     {
-        private readonly List<FinancialTransaction> _transactions = new List<FinancialTransaction>(); 
-        public void Load(string transactionData)
+        private List<FinancialTransaction> _transactions = new List<FinancialTransaction>(); 
+        public void Load(string transactionFile)
         {
-            
+            var loader = new FinancialTransactionLoader();
+            _transactions = loader.LoadFile(transactionFile).ToList();
         }
 
         public void AddTransaction(DateTime dateTime, string description, decimal amount, string category)

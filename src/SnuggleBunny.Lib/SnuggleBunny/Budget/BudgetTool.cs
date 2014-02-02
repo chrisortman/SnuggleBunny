@@ -14,7 +14,8 @@ namespace SnuggleBunny.Budget
 
         public BudgetTool(string configFile)
         {
-            
+            var loader = new BudgetConfigLoader();
+            _config = loader.LoadFile(configFile);
         }
 
         public BudgetTool()
