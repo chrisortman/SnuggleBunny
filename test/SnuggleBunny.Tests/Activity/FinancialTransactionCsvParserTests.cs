@@ -7,45 +7,44 @@ namespace SnuggleBunny.Tests.Activity
 {
     public class FinancialTransactionCsvParserTests
     {
-        public class TheTryParseLineMethod
+
+        public class TheHasMoreRowsMethod
+        {
+
+            [Fact]
+            public void GoesFromTrueToFalseWhenEOFIsReached()
+            {
+                var csvReader = TestHelpers.CreateCsvReader(new[,]
+                {
+                    {"1/2/2014", "Walmart", "10.00", "grocery"},
+                });
+
+                var parser = new FinancialTransactionCsvParser(csvReader);
+                parser.HasMoreRows().ShouldBe(true);
+                csvReader.Read();
+                parser.HasMoreRows().ShouldBe(false);
+
+            }
+        }
+
+        public class TheTryReadTransactionMethod
         {
             [Fact]
-            public void ReturnsFalseWhenNotEnoughColumns()
+            public void WillCreateTransactionWhenValidData()
             {
-                var parser = new FinancialTransactionCsvParser();
-                FinancialTransaction transaction;
-                parser.TryParseLine("1/1/2014,Walmart,1",out transaction).ShouldBe(false);
-            }
+                var csvReader = TestHelpers.CreateCsvReader(new[,]
+                {
+                    {"1/2/2014", "Walmart", "10.00", "grocery"},
+                });
 
-            [Fact]
-            public void InitializesAllPropertiesOfTheFinancialTransaction()
-            {
-                var parser = new FinancialTransactionCsvParser();
-                FinancialTransaction transaction;
-                parser.TryParseLine("1/15/2014,Walmart,10.00,clothing", out transaction).ShouldBe(true);
-                transaction.ShouldNotBe(null);
-                transaction.OccurredOn.ShouldBe(new DateTime(2014,1,15));
-                transaction.Description.ShouldBe("Walmart");
-                transaction.Amount.ShouldBe(10M);
-                transaction.Category.ShouldBe("clothing");
-            }
+                var parser = new FinancialTransactionCsvParser(csvReader);
+                var transaction = parser.TryReadTransaction();
+                transaction.IsSomething().ShouldBe(true);
+                transaction.Value.OccurredOn.ShouldBe(new DateTime(2014,1,2));
+                transaction.Value.Description.ShouldBe("Walmart");
+                transaction.Value.Amount.ShouldBe(10M);
+                transaction.Value.Category.ShouldBe("grocery");
 
-            [Fact]
-            public void ProvidesErrorMessageIfDateFormatIsInvalid()
-            {
-                var parser = new FinancialTransactionCsvParser();
-                FinancialTransaction transaction;
-                parser.TryParseLine("15/1/2014,Walmart,10.00,clothing",out transaction).ShouldBe(false);
-                parser.ErrorMessage.ShouldBe("Invalid date format '15/1/2014'");
-            }
-
-            [Fact]
-            public void ProvidesErrorMessageIfDecimalHasBogusCharacters()
-            {
-                var parser = new FinancialTransactionCsvParser();
-                FinancialTransaction transaction;
-                parser.TryParseLine("1/14/2014,Walmart,XX0.00,clothing",out transaction).ShouldBe(false);
-                parser.ErrorMessage.ShouldBe("Invalid money format 'XX0.00'");
             }
         }
     }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Shouldly;
+using SnuggleBunny.Infrastructure;
 using Xunit;
 
 namespace SnuggleBunny.Tests.Infrastructure
@@ -13,10 +14,6 @@ namespace SnuggleBunny.Tests.Infrastructure
         public CsvReaderTests()
         {
             _data = @"
-a,2,2/4/2013,5.00,
-a,2,2/4/2013,5.00,
-a,2,2/4/2013,5.00,
-a,2,2/4/2013,5.00,
 a,2,2/4/2013,5.00,
 a,2,2/4/2013,5.00,
 ";
@@ -33,7 +30,7 @@ a,2,2/4/2013,5.00,
                 lineCount++;
             }
 
-            lineCount.ShouldBe(6);
+            lineCount.ShouldBe(2);
             
         }
 
@@ -48,70 +45,46 @@ a,2,2/4/2013,5.00,
         }
 
         [Fact]
+        public void AccessingFieldWithoutReadingWillThrow()
+        {
+            Should.Throw<InvalidOperationException>(() => _reader[0].ShouldBe("a"));
+        }
+
+        [Fact]
         public void CanReadAFieldAsInt()
         {
             _reader.Read();
             _reader.GetInt(1).ShouldBe(2);
         }
-    }
 
-    public class CsvReader
-    {
-        private StringReader _innerReader;
-        private string _currentLine;
-        private string[] _currentLineParts;
-
-        public CsvReader(StringReader stringReader)
+        [Fact]
+        public void CanReadFieldAsDecimal()
         {
-            _innerReader = stringReader;
+            _reader.Read();
+            _reader.GetDecimal(3).ShouldBe(5M);
         }
 
-        public string this[int fieldIndex]
+        [Fact]
+        public void CanReadDateTime()
         {
-            get { return _currentLineParts[fieldIndex]; }
-        }
-        public bool Read()
-        {
-            string line = null;
-            while (line.IsBlank() && _innerReader.Peek() != -1)
-            {
-                line = _innerReader.ReadLine();
-            }
-            _currentLine = line;
-
-            if(!_currentLine.IsBlank())
-            {
-                _currentLineParts = _currentLine.Split(',');
-            }
-            return _currentLine != null;
+            _reader.Read();
+            _reader.GetDateTime(2).ShouldBe(new DateTime(2013, 2, 4));
         }
 
-        public int GetInt(int fieldIndex)
+        [Fact]
+        public void ReadingInvalidDataAsIntWillThrow()
         {
-            int x;
-            if (Int32.TryParse(this[fieldIndex], out x))
-            {
-                return x;
-            }
-            else
-            {
-                throw new CsvParseException("Unable convert field " + fieldIndex + " to an integer", fieldIndex);
-            }
-        }
-    }
-
-    public class CsvParseException : Exception
-    {
-        private int _fieldIndex;
-
-        public CsvParseException(string message, int fieldIndex) : base(message)
-        {
-            _fieldIndex = fieldIndex;
+            _reader.Read();
+            Should.Throw<CsvParseException>(() => _reader.GetInt(0));
         }
 
-        public int FieldIndex
+        [Fact]
+        public void EOFIsTrueWhenNoMoreData()
         {
-            get { return _fieldIndex; }
+            _reader.Read(); //first line
+            _reader.EOF.ShouldBe(false);
+            _reader.Read(); //second line
+            _reader.EOF.ShouldBe(true);
         }
     }
 }

@@ -55,7 +55,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Activity\ActivityReportLoaderTests.cs" />
+    <Compile Include="Activity\FinancialTransactionLoaderTests.cs" />
     <Compile Include="Activity\FinancialTransactionCsvParserTests.cs" />
     <Compile Include="Budget\BudgetToolTests.cs" />
     <Compile Include="Budget\Config\BudgetConfigLoaderTests.cs" />
@@ -84,6 +84,9 @@
       <Project>{b1f8a55f-ce7a-4737-bebb-4723f1beab12}</Project>
       <Name>SnuggleBunny.Lib</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

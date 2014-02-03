@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
+using SnuggleBunny.Infrastructure;
 
 namespace SnuggleBunny.Activity
 {
@@ -9,31 +10,28 @@ namespace SnuggleBunny.Activity
     {
         public IEnumerable<FinancialTransaction> LoadFile(string fileName)
         {
-            var parser = new FinancialTransactionCsvParser();
 
             if (File.Exists(fileName))
             {
-                using (var file = new StreamReader(fileName))
+                var parser = new FinancialTransactionCsvParser(fileName);
+                while (parser.HasMoreRows())
                 {
-                    string line = null;
-                    while ((line = file.ReadLine()) != null)
+                    var transaction = parser.TryReadTransaction();
+                    if (transaction.IsSomething())
                     {
-                        FinancialTransaction parsedTransaction = null;
-                        if (parser.TryParseLine(line, out parsedTransaction))
-                        {
-                            yield return parsedTransaction;
-                        }
-                        else
-                        {
-                            break;
-                        }
+                        yield return transaction.Value;
                     }
-
-                    if (!parser.ErrorMessage.IsBlank())
+                    else
                     {
-                        throw new ConfigurationErrorsException("Invalid transaction file");
+                        break;
                     }
                 }
+
+                if (!parser.ErrorMessage.IsBlank())
+                {
+                    throw new ConfigurationErrorsException("Invalid transaction file");
+                }
+
             }
         }
     }
