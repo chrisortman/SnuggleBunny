@@ -52,7 +52,7 @@
     <Compile Include="SnuggleBunny\Activity\MonthGroup.cs" />
     <Compile Include="SnuggleBunny\Activity\TotalledTransactionGroup.cs" />
     <Compile Include="SnuggleBunny\Budget\Config\BudgetConfig.cs" />
-    <Compile Include="SnuggleBunny\Budget\BudgetTool.cs" />
+    <Compile Include="SnuggleBunny\BudgetTool.cs" />
     <Compile Include="SnuggleBunny\Budget\Analyzers\CategorySpendingExceededAlert.cs" />
     <Compile Include="SnuggleBunny\Budget\Config\BudgetConfigLoader.cs" />
     <Compile Include="SnuggleBunny\Budget\Config\Builders\BudgetConfigBuilder.cs" />
@@ -64,10 +64,10 @@
     <Compile Include="SnuggleBunny\Infrastructure\ICsvReader.cs" />
     <Compile Include="SnuggleBunny\Infrastructure\IFileDataSource.cs" />
     <Compile Include="SnuggleBunny\_Ext\FrameworkExtensions.cs" />
-    <Compile Include="SnuggleBunny\_Ext\Guard.cs" />
-    <Compile Include="SnuggleBunny\Budget\ISpendingAlert.cs" />
-    <Compile Include="SnuggleBunny\Budget\ISpendingAnalyzer.cs" />
-    <Compile Include="SnuggleBunny\_Ext\Maybe.cs" />
+    <Compile Include="SnuggleBunny\_Core\Guard.cs" />
+    <Compile Include="SnuggleBunny\ISpendingAlert.cs" />
+    <Compile Include="SnuggleBunny\ISpendingAnalyzer.cs" />
+    <Compile Include="SnuggleBunny\_Core\Maybe.cs" />
     <Compile Include="SnuggleBunny\Budget\Analyzers\MonthlySpendingExceededIncomeAlert.cs" />
     <Compile Include="SnuggleBunny\Budget\Analyzers\MonthlySpendingVersusIncomeAnalyzer.cs" />
     <Compile Include="SnuggleBunny\Budget\Analyzers\CategorySpendingLimitAnalyzer.cs" />
@@ -77,8 +77,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <Compile Include="SnuggleBunny\_Ext\Jetbrains.Annotations.cs" />
+    <Compile Include="SnuggleBunny\_Core\Jetbrains.Annotations.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
