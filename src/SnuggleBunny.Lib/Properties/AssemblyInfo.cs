@@ -32,9 +32,9 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 
 [assembly: AssemblyTitle("SnuggleBunny.Lib")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("The SnuggleBunny budgeting tool")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Chris Ortman")]
 [assembly: AssemblyProduct("SnuggleBunny.Lib")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
