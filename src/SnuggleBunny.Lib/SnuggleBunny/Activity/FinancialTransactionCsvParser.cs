@@ -1,49 +1,62 @@
 using System;
+using System.IO;
+using SnuggleBunny.Infrastructure;
 
 namespace SnuggleBunny.Activity
 {
     public class FinancialTransactionCsvParser
     {
-        public bool TryParseLine(string line,out FinancialTransaction transaction)
+        private readonly ICsvReader _csvReader;
+        private static readonly string[] _fieldNames = new[] {"OccurredOn", "Description", "Amount", "Category"};
+
+        public FinancialTransactionCsvParser(string fileName)
+
         {
-            Guard.AgainstNull(line, "line");
+            _csvReader = new CsvReader(new StreamReader(fileName));
+        }
 
-            var parts = line.Split(',');
-            if (parts.Length != 4)
-            {
-                transaction = null;
-                return false;
-            }
-
-            transaction = new FinancialTransaction();
-            transaction.Description = parts[1];
-            transaction.Category = parts[3];
-
-            DateTime dt;
-            if (DateTime.TryParse(parts[0],out dt))
-            {
-                transaction.OccurredOn = dt;
-            }
-            else
-            {
-                ErrorMessage = String.Format("Invalid date format '{0}'", parts[0]);
-                return false;
-            }
-
-            Decimal d;
-            if (Decimal.TryParse(parts[2], out d))
-            {
-                transaction.Amount = d;
-            }
-            else
-            {
-                ErrorMessage = String.Format("Invalid money format '{0}'", parts[2]);
-                return false;
-            }
-
-            return true;
+        public FinancialTransactionCsvParser(ICsvReader reader)
+        {
+            _csvReader = reader;
+        }
+        public FinancialTransactionCsvParser()
+        {
         }
 
         public string ErrorMessage { get; private set; }
+
+        public bool HasMoreRows()
+        {
+            return !_csvReader.EOF;
+        }
+
+        public Maybe<FinancialTransaction> TryReadTransaction()
+        {
+            if (_csvReader.Read())
+            {
+                try
+                {
+                    var transaaction = new FinancialTransaction()
+                    {
+                        OccurredOn = _csvReader.GetDateTime(0),
+                        Description = _csvReader.GetString(1),
+                        Amount = _csvReader.GetDecimal(2),
+                        Category = _csvReader.GetString(3),
+                    };
+
+                    return transaaction.ToMaybe();
+                }
+                catch (CsvParseException parseException)
+                {
+                    Guard.Requires(parseException.FieldIndex < _fieldNames.Length, "Invalid field index in error");
+
+                    ErrorMessage = String.Format("Invalid format for {0}. Data was {1}",
+                        _fieldNames[parseException.FieldIndex], _csvReader[parseException.FieldIndex]);
+
+                }
+            }
+
+            return Maybe<FinancialTransaction>.Nothing;
+        }
     }
 }

@@ -6,7 +6,7 @@ using Xunit;
 
 namespace SnuggleBunny.Tests.Activity
 {
-    public class ActivityReportLoaderTests
+    public class FinancialTransactionLoaderTests
     {
         public class TheLoadFileMethod
         {

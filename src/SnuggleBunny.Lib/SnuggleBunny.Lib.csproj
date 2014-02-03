@@ -52,6 +52,10 @@
     <Compile Include="SnuggleBunny\Budget\Config\BudgetConfigLoader.cs" />
     <Compile Include="SnuggleBunny\Budget\Config\Builders\BudgetConfigBuilder.cs" />
     <Compile Include="SnuggleBunny\Budget\Config\Builders\CategoryBuilder.cs" />
+    <Compile Include="SnuggleBunny\Infrastructure\CsvParseException.cs" />
+    <Compile Include="SnuggleBunny\Infrastructure\CsvReader.cs" />
+    <Compile Include="SnuggleBunny\Infrastructure\CsvReaderHelpers.cs" />
+    <Compile Include="SnuggleBunny\Infrastructure\ICsvReader.cs" />
     <Compile Include="SnuggleBunny\_Ext\FrameworkExtensions.cs" />
     <Compile Include="SnuggleBunny\_Ext\Guard.cs" />
     <Compile Include="SnuggleBunny\Budget\ISpendingAlert.cs" />
