@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Security.Cryptography;
-using Shouldly;
+﻿using Shouldly;
 using SnuggleBunny.Activity;
 using SnuggleBunny.Budget;
 using Xunit;

@@ -17,7 +17,7 @@ namespace SnuggleBunny.Budget.Analyzers
         public IEnumerable<ISpendingAlert> Analyze(ActivityReport activityReport)
         {
             var spendingByCategoryMonth =
-                from transaction in activityReport.Transactions()
+                from transaction in activityReport.AllTransactions()
                 group transaction by
                     new
                     {
