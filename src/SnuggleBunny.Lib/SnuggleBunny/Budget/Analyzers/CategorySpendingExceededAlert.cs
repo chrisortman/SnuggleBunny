@@ -29,6 +29,11 @@ namespace SnuggleBunny.Budget.Analyzers
     using System;
     using System.Globalization;
 
+    /// <summary>
+    /// Alert class used to report instances where spending in a category
+    /// exceeded the alotted budget.
+    /// </summary>
+    /// <seealso cref="CategorySpendingLimitAnalyzer"/>
     public class CategorySpendingExceededAlert : IEquatable<CategorySpendingExceededAlert>, ISpendingAlert
     {
         public CategorySpendingExceededAlert(string category, int month, decimal spent, decimal alloted)

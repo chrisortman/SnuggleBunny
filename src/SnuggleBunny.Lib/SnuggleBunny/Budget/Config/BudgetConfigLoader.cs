@@ -32,6 +32,9 @@ namespace SnuggleBunny.Budget.Config
     using Infrastructure;
     using YamlDotNet.RepresentationModel;
 
+    /// <summary>
+    /// Loads the budget configuration from a YAML file.
+    /// </summary>
     public class BudgetConfigLoader
     {
         private BudgetConfig _config;

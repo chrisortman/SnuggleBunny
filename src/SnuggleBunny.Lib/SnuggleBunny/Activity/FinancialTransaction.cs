@@ -28,11 +28,29 @@ namespace SnuggleBunny.Activity
 {
     using System;
 
+    /// <summary>
+    /// Represents a financial transaction the user has made
+    /// </summary>
     public class FinancialTransaction
     {
+        /// <summary>
+        /// When it happened
+        /// </summary>
         public DateTime OccurredOn { get; set; }
+
+        /// <summary>
+        /// Description such as where the purchase was made
+        /// </summary>
         public string Description { get; set; }
+
+        /// <summary>
+        /// The amount of the purhcase
+        /// </summary>
         public Decimal Amount { get; set; }
+
+        /// <summary>
+        /// A category to assign the transaction to.
+        /// </summary>
         public string Category { get; set; }
     }
 }

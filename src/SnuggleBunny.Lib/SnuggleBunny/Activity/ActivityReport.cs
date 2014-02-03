@@ -30,6 +30,9 @@ namespace SnuggleBunny.Activity
     using System.Collections.Generic;
     using System.Linq;
 
+    /// <summary>
+    /// Encapsulates financial activity for a user.
+    /// </summary>
     public class ActivityReport
     {
         private List<FinancialTransaction> _transactions;
@@ -39,6 +42,10 @@ namespace SnuggleBunny.Activity
             _transactions = new List<FinancialTransaction>();
         }
 
+        /// <summary>
+        /// Reads the transactions out of the given file.
+        /// </summary>
+        /// <param name="transactionFile"></param>
         public void Load(string transactionFile)
         {
             Guard.AgainstNull(transactionFile, "transactionFile");
@@ -48,6 +55,13 @@ namespace SnuggleBunny.Activity
             _transactions = loader.LoadFile(transactionFile).ToList();
         }
 
+        /// <summary>
+        /// Add a transaction to this report
+        /// </summary>
+        /// <param name="dateTime">When the transaction ocurred</param>
+        /// <param name="description">A description such as where the purchase was made</param>
+        /// <param name="amount">The amount of the transaction</param>
+        /// <param name="category">A category to assign the transaction to</param>
         public void AddTransaction(DateTime dateTime, string description, decimal amount, string category)
         {
             Guard.AgainstNull(description, "description");
@@ -62,11 +76,22 @@ namespace SnuggleBunny.Activity
             });
         }
 
+        /// <summary>
+        /// Gets all transactions in the report
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<FinancialTransaction> AllTransactions()
         {
             return _transactions;
         }
 
+        /// <summary>
+        /// Groups the transactions using the specified grouping function.
+        /// <seealso cref="By"/>
+        /// </summary>
+        /// <typeparam name="TGroup">Type of the group key</typeparam>
+        /// <param name="grouper">Function used to group transactions</param>
+        /// <returns>Grouped transactions</returns>
         public IEnumerable<IGrouping<TGroup, FinancialTransaction>> GroupTransactions<TGroup>(
             Func<FinancialTransaction, TGroup> grouper)
         {

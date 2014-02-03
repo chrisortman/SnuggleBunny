@@ -29,6 +29,9 @@ namespace SnuggleBunny.Infrastructure
     using System;
     using System.IO;
 
+    /// <summary>
+    /// Used to read CSV data.
+    /// </summary>
     public sealed class CsvReader : ICsvReader
     {
         private readonly TextReader _innerReader;
@@ -40,6 +43,11 @@ namespace SnuggleBunny.Infrastructure
             _innerReader = stringReader;
         }
 
+        /// <summary>
+        /// Access the data stored in the given column/field.
+        /// </summary>
+        /// <param name="fieldIndex"></param>
+        /// <returns></returns>
         public string this[int fieldIndex]
         {
             get
@@ -49,11 +57,18 @@ namespace SnuggleBunny.Infrastructure
             }
         }
 
+        /// <summary>
+        /// True if there is no more data to read
+        /// </summary>
         public bool EOF
         {
             get { return _innerReader.Peek() == -1; }
         }
 
+        /// <summary>
+        /// Reads the next line from input and returns true if successful
+        /// </summary>
+        /// <returns></returns>
         public bool Read()
         {
             string line = null;

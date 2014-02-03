@@ -29,6 +29,10 @@ namespace SnuggleBunny.Infrastructure
     using System;
     using System.Runtime.Serialization;
 
+    /// <summary>
+    /// Error throw when we try to convert a CsvField to a given type but
+    /// are unable to.
+    /// </summary>
     [Serializable]
     public class CsvParseException : Exception
     {
@@ -39,6 +43,10 @@ namespace SnuggleBunny.Infrastructure
             _fieldIndex = fieldIndex;
         }
 
+        /// <summary>
+        /// Index of the failed field. Use to report more helpful error
+        /// messages.
+        /// </summary>
         public int FieldIndex
         {
             get { return _fieldIndex; }

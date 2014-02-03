@@ -28,6 +28,9 @@ namespace SnuggleBunny.Infrastructure
 {
     using System.IO;
 
+    /// <summary>
+    /// Interface used by file data sources.
+    /// </summary>
     public interface IFileDataSource
     {
         bool Exists();

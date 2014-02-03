@@ -28,6 +28,9 @@ namespace SnuggleBunny.Activity
 {
     using System;
 
+    /// <summary>
+    /// Group of transactions by month,year and category
+    /// </summary>
     public struct MonthCategoryGroup : IEquatable<MonthCategoryGroup>
     {
         public MonthCategoryGroup(int month, int year, string category)

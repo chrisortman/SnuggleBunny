@@ -28,13 +28,27 @@ namespace SnuggleBunny.Activity
 {
     using System.Linq;
 
+    /// <summary>
+    /// Helpers used to group transactions in LINQ queries
+    /// </summary>
     public static class By
     {
+
+        /// <summary>
+        /// Group transactions by month
+        /// </summary>
+        /// <param name="transaction"></param>
+        /// <returns></returns>
         public static MonthGroup Month(FinancialTransaction transaction)
         {
             return new MonthGroup(transaction.OccurredOn.Year, transaction.OccurredOn.Month);
         }
 
+        /// <summary>
+        /// Group transactions by month and category
+        /// </summary>
+        /// <param name="transaction"></param>
+        /// <returns></returns>
         public static MonthCategoryGroup MonthAndCategory(FinancialTransaction transaction)
         {
             return new MonthCategoryGroup(transaction.OccurredOn.Month, transaction.OccurredOn.Year,
@@ -42,8 +56,17 @@ namespace SnuggleBunny.Activity
         }
     }
 
+    /// <summary>
+    /// Helpers used to select & summarize transactions
+    /// </summary>
     public static class Transactions
     {
+        /// <summary>
+        /// Summarizes a group of transactions by totalling their amounts
+        /// </summary>
+        /// <typeparam name="TGroup"></typeparam>
+        /// <param name="transactionGroup"></param>
+        /// <returns></returns>
         public static TotalledTransactionGroup<TGroup> Totalled<TGroup>(
             IGrouping<TGroup, FinancialTransaction> transactionGroup)
         {

@@ -26,8 +26,15 @@
 
 namespace SnuggleBunny.Budget
 {
+    /// <summary>
+    /// Interface used by analyzers to provide alerts back to the <see cref="BudgetTool"/>
+    /// </summary>
     public interface ISpendingAlert
     {
+        /// <summary>
+        /// Describes the details of the alert.
+        /// </summary>
+        /// <returns></returns>
         string Describe();
     }
 }

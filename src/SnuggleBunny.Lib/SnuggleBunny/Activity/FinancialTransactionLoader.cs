@@ -30,13 +30,35 @@ namespace SnuggleBunny.Activity
     using System.Configuration;
     using Infrastructure;
 
+    /// <summary>
+    /// Loads transactions from the given data source.
+    /// </summary>
     public class FinancialTransactionLoader
     {
+
+        /// <summary>
+        /// Loads the transactions from the csv file given
+        /// </summary>
+        /// <param name="fileName">Name of the file, can be relative or absolute path</param>
+        /// <returns>The transactions</returns>
+        /// <exception cref="ConfigurationErrorsException">If a parsing error occurrs</exception>
+        ///<remarks>
+        /// Will return empty if the file does not exist
+        /// </remarks>
         public IEnumerable<FinancialTransaction> LoadFile(string fileName)
         {
             return Load(new FileDataSource(fileName));
         }
 
+        /// <summary>
+        /// Loads the transactions from the data source given
+        /// </summary>
+        /// <param name="dataSource">Data source to load transactions from</param>
+        /// <returns>The transactions</returns>
+        /// <exception cref="ConfigurationErrorsException">If a parsing error occurrs</exception>
+        ///<remarks>
+        /// Will return empty if the file does not exist
+        /// </remarks>
         public IEnumerable<FinancialTransaction> Load(IFileDataSource dataSource)
         {
             if (dataSource.Exists())

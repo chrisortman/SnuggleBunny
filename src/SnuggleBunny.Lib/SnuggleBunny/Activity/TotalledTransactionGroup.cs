@@ -29,6 +29,10 @@ namespace SnuggleBunny.Activity
     using System.Collections.Generic;
     using System.Linq;
 
+    /// <summary>
+    /// Group of transactions that have been totalled.
+    /// </summary>
+    /// <typeparam name="TGroup"></typeparam>
     public struct TotalledTransactionGroup<TGroup>
     {
         public TotalledTransactionGroup(TGroup @group, IEnumerable<FinancialTransaction> transactions) : this()

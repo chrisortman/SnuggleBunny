@@ -26,6 +26,9 @@
 
 namespace SnuggleBunny.Budget.Config.Builders
 {
+    /// <summary>
+    /// Used to provide a fluent interface for configuring a spending category.
+    /// </summary>
     public class CategoryBuilder
     {
         private readonly string _categoryName;

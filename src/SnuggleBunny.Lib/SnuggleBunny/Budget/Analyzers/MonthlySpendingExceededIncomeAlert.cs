@@ -29,6 +29,11 @@ namespace SnuggleBunny.Budget.Analyzers
     using System;
     using System.Globalization;
 
+    /// <summary>
+    /// Alert class used to report that the spending for
+    /// a given month exceeded the amount of income for that
+    /// month.
+    /// </summary>
     public class MonthlySpendingExceededIncomeAlert : IEquatable<MonthlySpendingExceededIncomeAlert>, ISpendingAlert
     {
         private readonly decimal _available;

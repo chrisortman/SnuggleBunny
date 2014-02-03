@@ -28,6 +28,9 @@ namespace SnuggleBunny.Infrastructure
 {
     using System.IO;
 
+    /// <summary>
+    /// Encapsulates file access as a datasource
+    /// </summary>
     public class FileDataSource : IFileDataSource
     {
         private readonly string _filename;
