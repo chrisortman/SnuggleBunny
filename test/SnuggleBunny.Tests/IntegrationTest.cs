@@ -29,14 +29,17 @@ namespace SnuggleBunny.Tests
     using Shouldly;
     using SnuggleBunny.Activity;
     using SnuggleBunny.Budget;
+    using SnuggleBunny.Budget.Analyzers;
     using Xunit;
 
     public class IntegrationTests
     {
         [Fact]
-        public void DetectsOverespendingInACategory()
+        public void DetectsOverspendingInACategory()
         {
             var tool = new BudgetTool(@"TestData\budget_config.yml");
+            tool.AddAnalyzer(new CategorySpendingLimitAnalyzer());
+            tool.AddAnalyzer(new MonthlySpendingVersusIncomeAnalyzer());
             var spendingReport = new ActivityReport();
             spendingReport.Load(@"TestData\transactions.csv");
 
