@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="SnuggleBunny\App\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SnuggleBunny\App\ProgramArguments.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

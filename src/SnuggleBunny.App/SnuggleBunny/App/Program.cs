@@ -14,39 +14,45 @@ namespace SnuggleBunny.App
     {
         static void Main(string[] args)
         {
-            if (args.Length < 1)
+            var programArgs = new ProgramArguments(args);
+            if (programArgs.IsValid)
             {
-                Console.WriteLine("Usage: snugglebunny.app.exe <config_file> <transaction_file>");
-                return;
+                if (programArgs.VerifyFiles())
+                {
+                    var alerts = RunTool(programArgs);
+                    PrintAlerts(alerts);
+                }
             }
-
-            var configFile = args[0];
-            var transactionFile = args[1];
-
-            if (!File.Exists(configFile))
+            else
             {
-                Console.WriteLine("Config file {0} does not exist",Path.GetFullPath(configFile));
-                return;
+                PrintUsage();
             }
+        }
 
-            if (!File.Exists(transactionFile))
-            {
-                Console.WriteLine("Transaction file {0} does not exist", Path.GetFullPath(transactionFile));
-            }
+        private static void PrintUsage()
+        {
+            Console.WriteLine("Usage: snugglebunny.app.exe <config_file> <transaction_file>");
+        }
 
-            var tool = new BudgetTool(configFile);
+        private static IReadOnlyCollection<ISpendingAlert> RunTool(ProgramArguments programArgs)
+        {
+            var tool = new BudgetTool(programArgs.ConfigFile);
             tool.AddAnalyzer(new CategorySpendingLimitAnalyzer());
             tool.AddAnalyzer(new MonthlySpendingVersusIncomeAnalyzer());
 
             var report = new ActivityReport();
-            report.Load(transactionFile);
+            report.Load(programArgs.TransactionFile);
 
             var alerts = tool.Analyze(report);
+            return alerts;
+        }
+
+        private static void PrintAlerts(IReadOnlyCollection<ISpendingAlert> alerts)
+        {
             foreach (var alert in alerts)
             {
                 Console.WriteLine(alert.Describe());
             }
-
         }
     }
 }
