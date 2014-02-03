@@ -28,17 +28,31 @@ namespace SnuggleBunny.Budget.Config
 {
     using System.Collections.Generic;
 
+    /// <summary>
+    /// Holds all the configurations and rules for your budget.
+    /// </summary>
     public class BudgetConfig
     {
         private readonly Dictionary<string, SpendingCategory> _categories = new Dictionary<string, SpendingCategory>();
 
+        /// <summary>
+        /// Total amount of all montly income.
+        /// </summary>
         public decimal MonthlyIncome { get; set; }
 
+        /// <summary>
+        /// Categories used to track spending.
+        /// </summary>
         public Dictionary<string, SpendingCategory> Categories
         {
             get { return _categories; }
         }
 
+        /// <summary>
+        /// Creates a new category with the given limit
+        /// </summary>
+        /// <param name="categoryName">Name of the category</param>
+        /// <param name="limit">Spending limit</param>
         public void DefineCategory(string categoryName, decimal limit)
         {
             _categories.Add(categoryName, new SpendingCategory

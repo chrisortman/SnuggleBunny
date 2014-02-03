@@ -34,6 +34,11 @@ namespace SnuggleBunny.Budget
     using Config;
     using Config.Builders;
 
+    /// <summary>
+    /// BudgetTool
+    /// Allows you to define rules for your budget to follow and import your financial transactions
+    /// for analysis.
+    /// </summary>
     public class BudgetTool
     {
         private readonly List<ISpendingAnalyzer> _analyzers;
@@ -55,6 +60,10 @@ namespace SnuggleBunny.Budget
             _analyzers = new List<ISpendingAnalyzer>();
         }
 
+        /// <summary>
+        /// Programmatically configure your budget 
+        /// </summary>
+        /// <param name="action"></param>
         public void Configure(Action<BudgetConfigBuilder> action)
         {
             Guard.AgainstNull(action, "action");
@@ -63,12 +72,21 @@ namespace SnuggleBunny.Budget
             action(builder);
         }
 
+        /// <summary>
+        /// Add the given analyzer
+        /// </summary>
+        /// <param name="analyzer"></param>
         public void AddAnalyzer(ISpendingAnalyzer analyzer)
         {
             Guard.AgainstNull(analyzer, "analyzer");
             _analyzers.Add(analyzer);
         }
 
+        /// <summary>
+        /// Analyze your financial activity.
+        /// </summary>
+        /// <param name="activityReport"></param>
+        /// <returns></returns>
         public IReadOnlyCollection<ISpendingAlert> Analyze(ActivityReport activityReport)
         {
             Guard.AgainstNull(activityReport, "activityReport");

@@ -31,6 +31,11 @@ namespace SnuggleBunny.Budget.Analyzers
     using Activity;
     using Config;
 
+    /// <summary>
+    /// Analyzes a spending report looking for instances where
+    /// the user has spent more money in a given category than
+    /// they alotted in their budget.
+    /// </summary>
     public class CategorySpendingLimitAnalyzer : ISpendingAnalyzer
     {
         private Dictionary<string, SpendingCategory> _categories;
@@ -49,12 +54,15 @@ namespace SnuggleBunny.Budget.Analyzers
             return alerts;
         }
 
+        [NotNull]
         private SpendingCategory GetCategory(TotalledTransactionGroup<MonthCategoryGroup> arg)
         {
             Guard.AgainstNull(arg, "arg");
             Guard.Requires(_categories.ContainsKey(arg.Group.Category), "Invalid category");
 
             var category = _categories[arg.Group.Category];
+            Guard.Requires(category != null,"category existed in dictionary but was null");
+
             return category;
         }
 

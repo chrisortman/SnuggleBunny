@@ -30,9 +30,22 @@ namespace SnuggleBunny.Budget
     using Activity;
     using Config;
 
+    /// <summary>
+    /// Contract for analyzers to be plugged in.
+    /// </summary>
     public interface ISpendingAnalyzer
     {
+        /// <summary>
+        /// Initalize the analyzer with any settings provided in the budget config.
+        /// </summary>
+        /// <param name="config"></param>
         void Initialize(BudgetConfig config);
+
+        /// <summary>
+        /// Run analysis on the activity report.
+        /// </summary>
+        /// <param name="activityReport"></param>
+        /// <returns></returns>
         IEnumerable<ISpendingAlert> Analyze(ActivityReport activityReport);
     }
 }

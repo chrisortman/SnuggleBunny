@@ -31,6 +31,10 @@ namespace SnuggleBunny.Budget.Analyzers
     using Activity;
     using Config;
 
+    /// <summary>
+    /// Analyzes a <see cref="ActivityReport"/> for months where the total
+    /// amount spent exceeds the monthly income.
+    /// </summary>
     public class MonthlySpendingVersusIncomeAnalyzer : ISpendingAnalyzer
     {
         private decimal _monthlyIncome;
@@ -42,6 +46,8 @@ namespace SnuggleBunny.Budget.Analyzers
 
         public IEnumerable<ISpendingAlert> Analyze(ActivityReport activityReport)
         {
+            Guard.AgainstNull(activityReport,"activityReport");
+
             var alerts = activityReport.GroupTransactions(By.Month)
                 .Select(Transactions.Totalled)
                 .Where(SpentExceedsIncome)
@@ -50,9 +56,12 @@ namespace SnuggleBunny.Budget.Analyzers
             return alerts;
         }
 
-        private MonthlySpendingExceededIncomeAlert IncomeExceededAlert(TotalledTransactionGroup<MonthGroup> spent)
+        [NotNull]
+        private MonthlySpendingExceededIncomeAlert IncomeExceededAlert(TotalledTransactionGroup<MonthGroup> totalledTransactions)
         {
-            return new MonthlySpendingExceededIncomeAlert(spent.Group.Month, spent.Total, _monthlyIncome);
+            Guard.AgainstNull(totalledTransactions, "totalledTransactions");
+
+            return new MonthlySpendingExceededIncomeAlert(totalledTransactions.Group.Month, totalledTransactions.Total, _monthlyIncome);
         }
 
 

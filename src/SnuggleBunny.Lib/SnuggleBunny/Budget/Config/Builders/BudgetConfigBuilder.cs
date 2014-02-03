@@ -26,6 +26,9 @@
 
 namespace SnuggleBunny.Budget.Config.Builders
 {
+    /// <summary>
+    /// Used to provide a fluent inteface for configuring a budget.
+    /// </summary>
     public class BudgetConfigBuilder
     {
         private readonly BudgetConfig _config;
@@ -35,12 +38,21 @@ namespace SnuggleBunny.Budget.Config.Builders
             _config = config;
         }
 
+        /// <summary>
+        /// Creates a new spending category.
+        /// </summary>
+        /// <param name="categoryName"></param>
+        /// <returns></returns>
         public CategoryBuilder Category(string categoryName)
         {
             var builder = new CategoryBuilder(categoryName, _config);
             return builder;
         }
 
+        /// <summary>
+        /// Sets the available income per month.
+        /// </summary>
+        /// <param name="amount"></param>
         public void IncomePerMonth(decimal amount)
         {
             _config.MonthlyIncome = amount;

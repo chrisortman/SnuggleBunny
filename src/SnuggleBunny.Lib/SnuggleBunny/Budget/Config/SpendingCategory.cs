@@ -26,6 +26,9 @@
 
 namespace SnuggleBunny.Budget.Config
 {
+    /// <summary>
+    /// A category of purchases with a spending limit.
+    /// </summary>
     public class SpendingCategory
     {
         public string Name { get; set; }

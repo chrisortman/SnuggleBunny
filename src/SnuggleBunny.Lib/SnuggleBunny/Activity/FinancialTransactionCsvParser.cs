@@ -29,6 +29,10 @@ namespace SnuggleBunny.Activity
     using System;
     using Infrastructure;
 
+    /// <summary>
+    /// Responsible for parsing <see cref="FinancialTransaction"/> data out of
+    /// a CSV file
+    /// </summary>
     public sealed class FinancialTransactionCsvParser : IDisposable
     {
         private static readonly string[] _fieldNames = {"OccurredOn", "Description", "Amount", "Category"};
@@ -39,6 +43,9 @@ namespace SnuggleBunny.Activity
             _csvReader = reader;
         }
 
+        /// <summary>
+        /// If an error occurrs parsing a value it will be available here
+        /// </summary>
         public string ErrorMessage { get; private set; }
 
         public void Dispose()
@@ -54,6 +61,11 @@ namespace SnuggleBunny.Activity
             return !_csvReader.EOF;
         }
 
+        /// <summary>
+        /// Attempts to read a transaction line.
+        /// If it fails <see cref=""></typeparam>"/>
+        /// </summary>
+        /// <returns>The transaction if it parses successfully otherwise Nothing</returns>
         public Maybe<FinancialTransaction> MaybeReadTransaction()
         {
             if (_csvReader.Read())

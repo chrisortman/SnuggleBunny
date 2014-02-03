@@ -28,6 +28,9 @@ namespace SnuggleBunny.Infrastructure
 {
     using System;
 
+    /// <summary>
+    /// Interface used for CSV reading.
+    /// </summary>
     public interface ICsvReader : IDisposable
     {
         string this[int fieldIndex] { get; }
