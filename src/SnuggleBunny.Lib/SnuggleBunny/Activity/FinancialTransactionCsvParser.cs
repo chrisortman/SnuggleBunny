@@ -4,7 +4,7 @@ using SnuggleBunny.Infrastructure;
 
 namespace SnuggleBunny.Activity
 {
-    public class FinancialTransactionCsvParser
+    public class FinancialTransactionCsvParser : IDisposable
     {
         private readonly ICsvReader _csvReader;
         private static readonly string[] _fieldNames = new[] {"OccurredOn", "Description", "Amount", "Category"};
@@ -57,6 +57,14 @@ namespace SnuggleBunny.Activity
             }
 
             return Maybe<FinancialTransaction>.Nothing;
+        }
+
+        public void Dispose()
+        {
+            if (_csvReader != null)
+            {
+                _csvReader.Dispose();
+            }
         }
     }
 }

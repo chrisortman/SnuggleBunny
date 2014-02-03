@@ -57,5 +57,13 @@ namespace SnuggleBunny.Infrastructure
             }
         }
 
+
+        public void Dispose()
+        {
+            if (_innerReader != null)
+            {
+                _innerReader.Dispose();
+            }
+        }
     }
 }

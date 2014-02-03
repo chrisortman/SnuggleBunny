@@ -55,6 +55,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Activity\ActivityReportTests.cs" />
     <Compile Include="Activity\FinancialTransactionLoaderTests.cs" />
     <Compile Include="Activity\FinancialTransactionCsvParserTests.cs" />
     <Compile Include="Budget\BudgetToolTests.cs" />
