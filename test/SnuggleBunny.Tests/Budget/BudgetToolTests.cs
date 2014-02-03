@@ -1,7 +1,10 @@
 using System;
+using System.Linq;
+using NSubstitute;
 using Shouldly;
 using SnuggleBunny.Activity;
 using SnuggleBunny.Budget;
+using SnuggleBunny.Budget.Config;
 using Xunit;
 
 namespace SnuggleBunny.Tests
@@ -10,6 +13,27 @@ namespace SnuggleBunny.Tests
     {
         public class TheAnalyzeMethod
         {
+
+            [Fact]
+            public void RunsAllConfiguredAnalyzers()
+            {
+                var tool = new BudgetTool();
+                var a1 = Substitute.For<ISpendingAnalyzer>();
+                var a2 = Substitute.For<ISpendingAnalyzer>();
+
+                tool.AddAnalyzer(a1);
+                tool.AddAnalyzer(a2);
+
+                var report = new ActivityReport();
+                tool.Analyze(report);
+
+                a1.Received().Initialize(Arg.Any<BudgetConfig>());
+                a2.Received().Initialize(Arg.Any<BudgetConfig>());
+
+                a1.Received().Analyze(report);
+                a2.Received().Analyze(report);
+
+            }
             [Fact]
             public void DetectsOverspendingInACategory()
             {

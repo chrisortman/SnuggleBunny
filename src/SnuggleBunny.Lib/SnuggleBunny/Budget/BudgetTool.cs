@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using SnuggleBunny.Activity;
 using SnuggleBunny.Budget.Analyzers;
@@ -11,36 +12,37 @@ namespace SnuggleBunny.Budget
     public class BudgetTool
     {
         private readonly BudgetConfig _config;
+        private List<ISpendingAnalyzer> _analyzers;
 
         public BudgetTool(string configFile)
         {
             var loader = new BudgetConfigLoader();
             _config = loader.LoadFile(configFile);
+            _analyzers = new List<ISpendingAnalyzer>();
         }
 
         public BudgetTool()
         {
             _config = new BudgetConfig();
+            _analyzers = new List<ISpendingAnalyzer>();
         }
 
-        public IEnumerable<ISpendingAlert> Analyze(ActivityReport activityReport)
+        public IReadOnlyCollection<ISpendingAlert> Analyze(ActivityReport activityReport)
         {
-            var analyzers = new List<ISpendingAnalyzer>
-            {
-                new OverspendInCategoryForMonthAnalyzer(),
-                new MonthlySpendingVersusIncomeAnalyzer(),
-            };
-
-            analyzers.ForEach(x => x.Initialize(_config));
-
-            return analyzers.SelectMany(x => x.Analyze(activityReport));
-
+            _analyzers.ForEach(x => x.Initialize(_config));
+            return new ReadOnlyCollection<ISpendingAlert>(
+                _analyzers.SelectMany(x => x.Analyze(activityReport)).ToList());
         }
 
         public void Configure(Action<BudgetConfigBuilder> action)
         {
             var builder = new BudgetConfigBuilder(_config);
             action(builder);
+        }
+
+        public void AddAnalyzer(ISpendingAnalyzer analyzer)
+        {
+            _analyzers.Add(analyzer);
         }
     }
 }
