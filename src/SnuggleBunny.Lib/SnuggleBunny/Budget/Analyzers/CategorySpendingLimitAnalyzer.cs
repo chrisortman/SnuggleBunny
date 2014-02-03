@@ -24,7 +24,7 @@ namespace SnuggleBunny.Budget.Analyzers
             return alerts;
         }
 
-        private SpendingCategory GetCategory(Transactions.TotalledTransactionGroup<By.MonthCategoryGroup> arg)
+        private SpendingCategory GetCategory(TotalledTransactionGroup<MonthCategoryGroup> arg)
         {
             Guard.AgainstNull(arg, "arg");
             Guard.Requires(_categories.ContainsKey(arg.Group.Category), "Invalid category");
@@ -33,13 +33,13 @@ namespace SnuggleBunny.Budget.Analyzers
             return category;
         }
 
-        private bool SpentExceedsCategoryLimit(Transactions.TotalledTransactionGroup<By.MonthCategoryGroup> transactionGroup)
+        private bool SpentExceedsCategoryLimit(TotalledTransactionGroup<MonthCategoryGroup> transactionGroup)
         {
             var category = GetCategory(transactionGroup);
             return transactionGroup.Total > category.Limit;
         }
 
-        private CategorySpendingExceededAlert SpendingExceededAlert(Transactions.TotalledTransactionGroup<By.MonthCategoryGroup> transactionGroup)
+        private CategorySpendingExceededAlert SpendingExceededAlert(TotalledTransactionGroup<MonthCategoryGroup> transactionGroup)
         {
             var category = GetCategory(transactionGroup);
 

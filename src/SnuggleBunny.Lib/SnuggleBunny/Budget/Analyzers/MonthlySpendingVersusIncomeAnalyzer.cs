@@ -25,13 +25,13 @@ namespace SnuggleBunny.Budget.Analyzers
               
         }
 
-        private MonthlySpendingExceededIncomeAlert IncomeExceededAlert(Transactions.TotalledTransactionGroup<By.MonthGroup> spent)
+        private MonthlySpendingExceededIncomeAlert IncomeExceededAlert(TotalledTransactionGroup<MonthGroup> spent)
         {
             return new MonthlySpendingExceededIncomeAlert(spent.Group.Month, spent.Total, _monthlyIncome);
         }
 
 
-        private bool SpentExceedsIncome(Transactions.TotalledTransactionGroup<By.MonthGroup> arg)
+        private bool SpentExceedsIncome(TotalledTransactionGroup<MonthGroup> arg)
         {
             return arg.Total > _monthlyIncome;
         }

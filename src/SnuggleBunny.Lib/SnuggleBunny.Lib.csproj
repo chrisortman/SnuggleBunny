@@ -48,6 +48,9 @@
     <Compile Include="SnuggleBunny\Activity\FinancialTransactionCsvParser.cs" />
     <Compile Include="SnuggleBunny\Activity\FinancialTransactionLoader.cs" />
     <Compile Include="SnuggleBunny\Activity\LINQHelpers.cs" />
+    <Compile Include="SnuggleBunny\Activity\MonthCategoryGroup.cs" />
+    <Compile Include="SnuggleBunny\Activity\MonthGroup.cs" />
+    <Compile Include="SnuggleBunny\Activity\TotalledTransactionGroup.cs" />
     <Compile Include="SnuggleBunny\Budget\Config\BudgetConfig.cs" />
     <Compile Include="SnuggleBunny\Budget\BudgetTool.cs" />
     <Compile Include="SnuggleBunny\Budget\Analyzers\CategorySpendingExceededAlert.cs" />

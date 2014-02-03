@@ -8,6 +8,8 @@ namespace SnuggleBunny.Budget.Config
 {
     public class BudgetConfigLoader
     {
+        private BudgetConfig _config;
+
         public BudgetConfig LoadFile(string budgetConfigYml)
         {
 
@@ -16,26 +18,17 @@ namespace SnuggleBunny.Budget.Config
 
         public BudgetConfig Load(IFileDataSource dataSource)
         {
-            var config = new BudgetConfig();
+            _config = new BudgetConfig();
             if (dataSource.Exists())
             {
                 using (var file = dataSource.ReadStream())
                 {
-                    var yaml = new YamlStream();
-                    yaml.Load(file);
-
-                    var rootNode = (YamlMappingNode)yaml.Documents[0].RootNode;
+                    var rootNode = LoadYamlRootNode(file);
 
                     try
                     {
                         var categories = (YamlSequenceNode)rootNode.Children[new YamlScalarNode("categories")];
-                        foreach (YamlMappingNode categoryNode in categories)
-                        {
-                            var categoryName = categoryNode.Children[new YamlScalarNode("name")].ToString();
-                            var limit = categoryNode.Children[new YamlScalarNode("budget")].ToString();
-
-                            config.DefineCategory(categoryName, Convert.ToDecimal(limit));
-                        }
+                        LoadCategories(categories);
                     }
                     catch (InvalidCastException iEx)
                     {
@@ -43,11 +36,30 @@ namespace SnuggleBunny.Budget.Config
                             "Invalid configuration file format.", iEx);
 
                     }
-
                 }
             }
 
-            return config;
+            return _config;
+        }
+
+        private static YamlMappingNode LoadYamlRootNode(StreamReader file)
+        {
+            var yaml = new YamlStream();
+            yaml.Load(file);
+
+            var rootNode = (YamlMappingNode) yaml.Documents[0].RootNode;
+            return rootNode;
+        }
+
+        private void LoadCategories(YamlSequenceNode categories)
+        {
+            foreach (YamlMappingNode categoryNode in categories)
+            {
+                var categoryName = categoryNode.Children[new YamlScalarNode("name")].ToString();
+                var limit = categoryNode.Children[new YamlScalarNode("budget")].ToString();
+
+                _config.DefineCategory(categoryName, Convert.ToDecimal(limit));
+            }
         }
     }
 }

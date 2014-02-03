@@ -38,7 +38,7 @@ namespace SnuggleBunny.Tests.Activity
                 });
 
                 var parser = new FinancialTransactionCsvParser(csvReader);
-                var transaction = parser.TryReadTransaction();
+                var transaction = parser.MaybeReadTransaction();
                 transaction.IsSomething().ShouldBe(true);
                 transaction.Value.OccurredOn.ShouldBe(new DateTime(2014,1,2));
                 transaction.Value.Description.ShouldBe("Walmart");

@@ -20,7 +20,7 @@ namespace SnuggleBunny.Activity
                 var parser = new FinancialTransactionCsvParser(dataSource.ReadCsv());
                 while (parser.HasMoreRows())
                 {
-                    var transaction = parser.TryReadTransaction();
+                    var transaction = parser.MaybeReadTransaction();
                     if (transaction.IsSomething())
                     {
                         yield return transaction.Value;
