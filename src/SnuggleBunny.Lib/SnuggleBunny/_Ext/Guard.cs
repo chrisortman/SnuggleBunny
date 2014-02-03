@@ -1,8 +1,10 @@
 using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 
 namespace SnuggleBunny
 {
+    [ExcludeFromCodeCoverage]
     [DebuggerStepThrough]
     public static class Guard
     {
@@ -104,6 +106,7 @@ namespace SnuggleBunny
     /// <summary>
     /// Indicates that marked element should be localized or not.
     /// </summary>
+    [ExcludeFromCodeCoverage]
     [AttributeUsage(AttributeTargets.All, AllowMultiple = false, Inherited = true)]
     public sealed class LocalizationRequiredAttribute : Attribute
     {
@@ -151,6 +154,7 @@ namespace SnuggleBunny
     /// Parameter, which contains format string, should be given in constructor.
     /// The format string should be in <see cref="string.Format(IFormatProvider,string,object[])"/> -like form
     /// </summary>
+    [ExcludeFromCodeCoverage]
     [AttributeUsage(AttributeTargets.Constructor | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
     public sealed class StringFormatMethodAttribute : Attribute
     {
@@ -175,6 +179,7 @@ namespace SnuggleBunny
     /// For example, <see cref="ArgumentNullException"/> has such parameter.
     /// </summary>
     [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false, Inherited = true)]
+    [ExcludeFromCodeCoverage]
     public sealed class InvokerParameterNameAttribute : Attribute
     {
     }
@@ -185,6 +190,7 @@ namespace SnuggleBunny
     /// </summary>
     /// <seealso cref="AssertionConditionAttribute"/>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
+    [ExcludeFromCodeCoverage]
     public sealed class AssertionMethodAttribute : Attribute
     {
     }
@@ -196,6 +202,7 @@ namespace SnuggleBunny
     /// </summary>
     /// <seealso cref="AssertionConditionType"/>
     [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false, Inherited = true)]
+    [ExcludeFromCodeCoverage]
     public sealed class AssertionConditionAttribute : Attribute
     {
         /// <summary>
@@ -245,6 +252,7 @@ namespace SnuggleBunny
     /// For example, it could unconditionally throw exception
     /// </summary>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
+    [ExcludeFromCodeCoverage]
     public sealed class TerminatesProgramAttribute : Attribute
     {
     }
@@ -255,6 +263,7 @@ namespace SnuggleBunny
     [AttributeUsage(
         AttributeTargets.Method | AttributeTargets.Parameter | AttributeTargets.Property | AttributeTargets.Delegate |
         AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
+    [ExcludeFromCodeCoverage]
     public sealed class CanBeNullAttribute : Attribute
     {
     }
@@ -265,6 +274,7 @@ namespace SnuggleBunny
     [AttributeUsage(
         AttributeTargets.Method | AttributeTargets.Parameter | AttributeTargets.Property | AttributeTargets.Delegate |
         AttributeTargets.Field, AllowMultiple = false, Inherited = true)]
+    [ExcludeFromCodeCoverage]
     public sealed class NotNullAttribute : Attribute
     {
     }
@@ -275,6 +285,7 @@ namespace SnuggleBunny
     /// </summary>
     [AttributeUsage(AttributeTargets.Interface | AttributeTargets.Class | AttributeTargets.Struct, AllowMultiple = false
         , Inherited = true)]
+    [ExcludeFromCodeCoverage]
     public sealed class CannotApplyEqualityOperatorAttribute : Attribute
     {
     }
@@ -296,6 +307,7 @@ namespace SnuggleBunny
     /// </example>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
     [BaseTypeRequired(typeof(Attribute))]
+    [ExcludeFromCodeCoverage]
     public sealed class BaseTypeRequiredAttribute : Attribute
     {
         /// <summary>
@@ -318,6 +330,7 @@ namespace SnuggleBunny
     /// so this symbol will not be marked as unused (as well as by other usage inspections)
     /// </summary>
     [AttributeUsage(AttributeTargets.All, AllowMultiple = false, Inherited = true)]
+    [ExcludeFromCodeCoverage]
     public sealed class UsedImplicitlyAttribute : Attribute
     {
         [UsedImplicitly]
@@ -359,6 +372,7 @@ namespace SnuggleBunny
     /// Should be used on attributes and causes ReSharper to not mark symbols marked with such attributes as unused (as well as by other usage inspections)
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
+    [ExcludeFromCodeCoverage]
     public sealed class MeansImplicitUseAttribute : Attribute
     {
         [UsedImplicitly]
@@ -448,6 +462,7 @@ namespace SnuggleBunny
     /// This attribute is intended to mark publicly available API which should not be removed and so is treated as used.
     /// </summary>
     [MeansImplicitUse]
+    [ExcludeFromCodeCoverage]
     public sealed class PublicAPIAttribute : Attribute
     {
         public PublicAPIAttribute()
@@ -468,6 +483,7 @@ namespace SnuggleBunny
     /// If the parameter is enumerable, indicates that it is enumerated while the method is executed.
     /// </summary>
     [AttributeUsage(AttributeTargets.Parameter, Inherited = true)]
+    [ExcludeFromCodeCoverage]
     public sealed class InstantHandleAttribute : Attribute
     {
     }
@@ -477,11 +493,13 @@ namespace SnuggleBunny
     /// The same as <see cref="System.Diagnostics.Contracts.PureAttribute"/>
     /// </summary>
     [AttributeUsage(AttributeTargets.Method, Inherited = true)]
+    [ExcludeFromCodeCoverage]
     public sealed class PureAttribute : Attribute
     {
     }
 
     [AttributeUsage(AttributeTargets.Parameter)]
+    [ExcludeFromCodeCoverage]
     public class PathReferenceAttribute : Attribute
     {
         public PathReferenceAttribute()
@@ -501,6 +519,7 @@ namespace SnuggleBunny
     // ASP.NET MVC attributes
 
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Method)]
+    [ExcludeFromCodeCoverage]
     public sealed class AspMvcActionAttribute : Attribute
     {
         [UsedImplicitly]
@@ -517,6 +536,7 @@ namespace SnuggleBunny
     }
 
     [AttributeUsage(AttributeTargets.Parameter)]
+    [ExcludeFromCodeCoverage]
     public sealed class AspMvcAreaAttribute : PathReferenceAttribute
     {
         [UsedImplicitly]
@@ -534,6 +554,7 @@ namespace SnuggleBunny
     }
 
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Method)]
+    [ExcludeFromCodeCoverage]
     public sealed class AspMvcControllerAttribute : Attribute
     {
         [UsedImplicitly]
@@ -550,31 +571,37 @@ namespace SnuggleBunny
     }
 
     [AttributeUsage(AttributeTargets.Parameter)]
+    [ExcludeFromCodeCoverage]
     public sealed class AspMvcMasterAttribute : Attribute
     {
     }
 
     [AttributeUsage(AttributeTargets.Parameter)]
+    [ExcludeFromCodeCoverage]
     public sealed class AspMvcModelTypeAttribute : Attribute
     {
     }
 
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Method)]
+    [ExcludeFromCodeCoverage]
     public sealed class AspMvcPartialViewAttribute : PathReferenceAttribute
     {
     }
 
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
+    [ExcludeFromCodeCoverage]
     public sealed class AspMvcSupressViewErrorAttribute : Attribute
     {
     }
 
     [AttributeUsage(AttributeTargets.Parameter)]
+    [ExcludeFromCodeCoverage]
     public sealed class AspMvcTemplateAttribute : Attribute
     {
     }
 
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Method)]
+    [ExcludeFromCodeCoverage]
     public sealed class AspMvcViewAttribute : PathReferenceAttribute
     {
     }
@@ -582,6 +609,7 @@ namespace SnuggleBunny
     // Razor attributes
 
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Method, Inherited = true)]
+    [ExcludeFromCodeCoverage]
     public sealed class RazorSectionAttribute : Attribute
     {
     }
