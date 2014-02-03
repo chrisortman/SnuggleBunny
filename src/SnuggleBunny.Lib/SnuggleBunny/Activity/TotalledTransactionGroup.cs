@@ -41,7 +41,14 @@ namespace SnuggleBunny.Activity
             Total = transactions.Sum(x => x.Amount);
         }
 
+        /// <summary>
+        /// The key used to group these transactions
+        /// </summary>
         public TGroup Group { get; private set; }
+
+        /// <summary>
+        /// The total amount of the grouped transactions.
+        /// </summary>
         public decimal Total { get; private set; }
     }
 }

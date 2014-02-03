@@ -33,8 +33,22 @@ namespace SnuggleBunny.Infrastructure
     /// </summary>
     public interface IFileDataSource
     {
+        /// <summary>
+        /// True if the file exists
+        /// </summary>
+        /// <returns></returns>
         bool Exists();
+
+        /// <summary>
+        /// Creates a <see cref="ICsvReader"/> for the file
+        /// </summary>
+        /// <returns></returns>
         ICsvReader ReadCsv();
+
+        /// <summary>
+        /// Creates a <see cref="StreamReader"/> for the file
+        /// </summary>
+        /// <returns></returns>
         StreamReader ReadStream();
     }
 }

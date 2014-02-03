@@ -51,8 +51,8 @@ namespace SnuggleBunny.Activity
         /// <returns></returns>
         public static MonthCategoryGroup MonthAndCategory(FinancialTransaction transaction)
         {
-            return new MonthCategoryGroup(transaction.OccurredOn.Month, transaction.OccurredOn.Year,
-                transaction.Category);
+            return new MonthCategoryGroup(transaction.OccurredOn.Year,
+                transaction.OccurredOn.Month, transaction.Category);
         }
     }
 

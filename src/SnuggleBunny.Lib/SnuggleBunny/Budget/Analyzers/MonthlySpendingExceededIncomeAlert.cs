@@ -47,20 +47,31 @@ namespace SnuggleBunny.Budget.Analyzers
             _available = available;
         }
 
+        /// <summary>
+        /// The month in which the spending limit exceeded the income
+        /// </summary>
         public int Month
         {
             get { return _month; }
         }
 
+        /// <summary>
+        /// The year in which the spending limit exceeded the income
+        /// </summary>
         public decimal Spent
         {
             get { return _spent; }
         }
 
+        /// <summary>
+        /// The availble income for the month
+        /// </summary>
         public decimal Available
         {
             get { return _available; }
         }
+
+        // - Equals methods overridden to provide value semantics
 
         public bool Equals(MonthlySpendingExceededIncomeAlert other)
         {

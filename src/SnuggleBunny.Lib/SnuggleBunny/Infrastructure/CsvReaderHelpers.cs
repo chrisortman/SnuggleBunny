@@ -37,11 +37,24 @@ namespace SnuggleBunny.Infrastructure
     /// </remarks>
     public static class CsvReaderHelpers
     {
+        /// <summary>
+        /// Gets the given field as a string value
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <param name="fieldIndex"></param>
+        /// <returns></returns>
         public static string GetString(this ICsvReader reader, int fieldIndex)
         {
             return reader[fieldIndex];
         }
 
+        /// <summary>
+        /// Gets the given field as an Int value.
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <param name="fieldIndex"></param>
+        /// <returns></returns>
+        /// <exception cref="CsvParseException">If the value cannot be parsed</exception>
         public static int GetInt(this ICsvReader reader, int fieldIndex)
         {
             int x;
@@ -52,6 +65,13 @@ namespace SnuggleBunny.Infrastructure
             throw FieldParseException(fieldIndex);
         }
 
+        /// <summary>
+        /// Gets the given field as a decimal
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <param name="fieldIndex"></param>
+        /// <returns></returns>
+        /// <exception cref="CsvParseException">If the value cannot be parsed</exception>
         public static decimal GetDecimal(this ICsvReader reader, int fieldIndex)
         {
             decimal x;
@@ -62,6 +82,13 @@ namespace SnuggleBunny.Infrastructure
             throw FieldParseException(fieldIndex);
         }
 
+        /// <summary>
+        /// Getsd the given field as a DateTime
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <param name="fieldIndex"></param>
+        /// <returns></returns>
+        /// <exception cref="CsvParseException">If the value cannot be parsed</exception>
         public static DateTime GetDateTime(this ICsvReader reader, int fieldIndex)
         {
             DateTime x;

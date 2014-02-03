@@ -44,8 +44,15 @@ namespace SnuggleBunny.Budget.Config
             return Load(new FileDataSource(budgetConfigYml));
         }
 
+        /// <summary>
+        /// Loads the BudgetConfig from the given datasource
+        /// </summary>
+        /// <param name="dataSource"></param>
+        /// <returns></returns>
         public BudgetConfig Load(IFileDataSource dataSource)
         {
+            Guard.AgainstNull(dataSource,"dataSource");
+
             _config = new BudgetConfig();
             if (dataSource.Exists())
             {
@@ -69,17 +76,24 @@ namespace SnuggleBunny.Budget.Config
             return _config;
         }
 
+        [NotNull]
         private static YamlMappingNode LoadYamlRootNode(StreamReader file)
         {
+            Guard.AgainstNull(file,"file");
+
             var yaml = new YamlStream();
             yaml.Load(file);
 
             var rootNode = (YamlMappingNode) yaml.Documents[0].RootNode;
+            Guard.Requires(rootNode != null,"No root node found");
+
             return rootNode;
         }
 
         private void LoadCategories(YamlSequenceNode categories)
         {
+            Guard.AgainstNull(categories,"categories");
+
             foreach (YamlMappingNode categoryNode in categories)
             {
                 var categoryName = categoryNode.Children[new YamlScalarNode("name")].ToString();

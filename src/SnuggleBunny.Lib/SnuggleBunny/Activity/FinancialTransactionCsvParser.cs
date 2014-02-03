@@ -48,14 +48,10 @@ namespace SnuggleBunny.Activity
         /// </summary>
         public string ErrorMessage { get; private set; }
 
-        public void Dispose()
-        {
-            if (_csvReader != null)
-            {
-                _csvReader.Dispose();
-            }
-        }
-
+        /// <summary>
+        /// True if there are more rows to process, otherwise false.
+        /// </summary>
+        /// <returns></returns>
         public bool HasMoreRows()
         {
             return !_csvReader.EOF;
@@ -92,6 +88,17 @@ namespace SnuggleBunny.Activity
             }
 
             return Maybe<FinancialTransaction>.Nothing;
+        }
+
+        /// <summary>
+        /// Disposes of this instance and the underlying reader.
+        /// </summary>
+        public void Dispose()
+        {
+            if (_csvReader != null)
+            {
+                _csvReader.Dispose();
+            }
         }
     }
 }

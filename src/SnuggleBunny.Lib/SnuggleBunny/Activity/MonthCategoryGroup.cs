@@ -33,7 +33,7 @@ namespace SnuggleBunny.Activity
     /// </summary>
     public struct MonthCategoryGroup : IEquatable<MonthCategoryGroup>
     {
-        public MonthCategoryGroup(int month, int year, string category)
+        public MonthCategoryGroup(int year, int month, string category)
             : this()
         {
             Guard.AgainstNull(category, "category");
@@ -43,9 +43,23 @@ namespace SnuggleBunny.Activity
             Category = category;
         }
 
+        /// <summary>
+        /// The month the transactions occurred in
+        /// </summary>
         public int Month { get; private set; }
+
+        /// <summary>
+        /// The year the transactions occurred in
+        /// </summary>
         public int Year { get; private set; }
+
+        /// <summary>
+        /// The category assigned to the transactions
+        /// </summary>
         public string Category { get; private set; }
+
+
+        // - Equals methods overridden to provide value semantics
 
         public bool Equals(MonthCategoryGroup other)
         {

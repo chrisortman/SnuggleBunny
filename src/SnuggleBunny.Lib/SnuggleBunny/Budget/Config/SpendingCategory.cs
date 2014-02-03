@@ -31,7 +31,15 @@ namespace SnuggleBunny.Budget.Config
     /// </summary>
     public class SpendingCategory
     {
+
+        /// <summary>
+        /// The name of the category
+        /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// The limit of the amount of spending
+        /// </summary>
         public decimal Limit { get; set; }
     }
 }

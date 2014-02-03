@@ -33,8 +33,23 @@ namespace SnuggleBunny.Infrastructure
     /// </summary>
     public interface ICsvReader : IDisposable
     {
+        /// <summary>
+        /// Obtains the field at the given index.
+        /// No formatting or processing is done
+        /// </summary>
+        /// <param name="fieldIndex"></param>
+        /// <returns></returns>
         string this[int fieldIndex] { get; }
+
+        /// <summary>
+        /// Tells if the reader as at the end of the file
+        /// </summary>
         bool EOF { get; }
+
+        /// <summary>
+        /// Read the next line from input and return true if any data was read
+        /// </summary>
+        /// <returns></returns>
         bool Read();
     }
 }

@@ -28,6 +28,9 @@ namespace SnuggleBunny
 {
     using System;
 
+    /// <summary>
+    /// Extension methods for core framework types
+    /// </summary>
     public static class FrameworkExtensions
     {
         /// <summary>

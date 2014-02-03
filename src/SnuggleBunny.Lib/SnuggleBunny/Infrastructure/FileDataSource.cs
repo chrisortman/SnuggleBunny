@@ -42,16 +42,28 @@ namespace SnuggleBunny.Infrastructure
             _filename = filename;
         }
 
+        /// <summary>
+        /// True if the file exists otherwise false
+        /// </summary>
+        /// <returns></returns>
         public bool Exists()
         {
             return File.Exists(_filename);
         }
 
+        /// <summary>
+        /// Creates a <see cref="ICsvReader"/> for the file
+        /// </summary>
+        /// <returns></returns>
         public ICsvReader ReadCsv()
         {
             return new CsvReader(new StreamReader(_filename));
         }
 
+        /// <summary>
+        /// Creates a <see cref="StreamReader"/> for the file
+        /// </summary>
+        /// <returns></returns>
         public StreamReader ReadStream()
         {
             return new StreamReader(_filename);

@@ -37,6 +37,7 @@ namespace SnuggleBunny.Tests
         [Fact]
         public void DetectsOverspendingInACategory()
         {
+            
             var tool = new BudgetTool(@"TestData\budget_config.yml");
             tool.AddAnalyzer(new CategorySpendingLimitAnalyzer());
             tool.AddAnalyzer(new MonthlySpendingVersusIncomeAnalyzer());

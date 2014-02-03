@@ -40,11 +40,21 @@ namespace SnuggleBunny.Budget.Analyzers
     {
         private Dictionary<string, SpendingCategory> _categories;
 
+        /// <summary>
+        /// Initializes this analyzer
+        /// </summary>
+        /// <param name="config"></param>
         public void Initialize(BudgetConfig config)
         {
             _categories = config.Categories;
         }
 
+        /// <summary>
+        /// Analyze the activity report for months where the category
+        /// limit was exceeded
+        /// </summary>
+        /// <param name="activityReport"></param>
+        /// <returns></returns>
         public IEnumerable<ISpendingAlert> Analyze(ActivityReport activityReport)
         {
             var alerts = activityReport.GroupTransactions(By.MonthAndCategory)

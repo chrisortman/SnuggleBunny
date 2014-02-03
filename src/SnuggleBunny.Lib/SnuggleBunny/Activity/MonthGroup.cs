@@ -40,8 +40,17 @@ namespace SnuggleBunny.Activity
             Month = month;
         }
 
+        /// <summary>
+        /// The year the transactions occurred in
+        /// </summary>
         public int Year { get; private set; }
+
+        /// <summary>
+        /// The month the transactions occurred in
+        /// </summary>
         public int Month { get; private set; }
+
+        // - Equals methods overridden to provide value semantics
 
         public bool Equals(MonthGroup other)
         {

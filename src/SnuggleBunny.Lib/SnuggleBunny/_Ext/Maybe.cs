@@ -45,16 +45,26 @@ namespace SnuggleBunny
             _hasValue = value == null ? false : true;
         }
 
+        /// <summary>
+        /// The contained value
+        /// </summary>
         public T Value
         {
             get { return _value; }
         }
 
+        /// <summary>
+        /// True if there is a value
+        /// </summary>
         public bool HasValue
         {
             get { return _hasValue; }
         }
 
+        /// <summary>
+        /// Overridden to describe the nothing value
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             if (!HasValue)
@@ -69,16 +79,34 @@ namespace SnuggleBunny
     [ExcludeFromCodeCoverage]
     public static class Maybe
     {
+        /// <summary>
+        /// Determines if the maybe is something
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="a"></param>
+        /// <returns></returns>
         public static bool IsSomething<T>(this Maybe<T> a)
         {
             return a.HasValue;
         }
 
+        /// <summary>
+        /// Determines if the maybe is nothing
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="a"></param>
+        /// <returns></returns>
         public static bool IsNothing<T>(this Maybe<T> a)
         {
             return !a.IsSomething();
         }
 
+        /// <summary>
+        /// Wraps the given object in a maybe instance
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="a"></param>
+        /// <returns>Something if the object is not null, otherwise Nothing</returns>
         public static Maybe<T> ToMaybe<T>(this T a)
         {
             if (a == null)

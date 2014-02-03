@@ -36,27 +36,45 @@ namespace SnuggleBunny.Budget.Analyzers
     /// <seealso cref="CategorySpendingLimitAnalyzer"/>
     public class CategorySpendingExceededAlert : IEquatable<CategorySpendingExceededAlert>, ISpendingAlert
     {
-        public CategorySpendingExceededAlert(string category, int month, decimal spent, decimal alloted)
+        public CategorySpendingExceededAlert(string category, int month, decimal spent, decimal allotted)
         {
             Guard.AgainstNull(category, "category");
 
             Category = category;
             Month = month;
             Spent = spent;
-            Alloted = alloted;
+            Allotted = allotted;
         }
 
+        /// <summary>
+        /// The category where spending was exceeded
+        /// </summary>
         public string Category { get; private set; }
+
+        /// <summary>
+        /// The month where the category spending was exceeded
+        /// </summary>
         public int Month { get; private set; }
+
+        /// <summary>
+        /// The year where the category spending was exceeded
+        /// </summary>
         public decimal Spent { get; private set; }
-        public decimal Alloted { get; private set; }
+
+        /// <summary>
+        /// The amount allotted to be spend in the category
+        /// </summary>
+        public decimal Allotted { get; private set; }
+
+        // - Equals methods overridden to provide value semantics
+
 
         public bool Equals(CategorySpendingExceededAlert other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
             return string.Equals(Category, other.Category) && Month == other.Month && Spent == other.Spent &&
-                   Alloted == other.Alloted;
+                   Allotted == other.Allotted;
         }
 
         public string Describe()
@@ -79,7 +97,7 @@ namespace SnuggleBunny.Budget.Analyzers
                 int hashCode = Category.GetHashCode();
                 hashCode = (hashCode*397) ^ Month;
                 hashCode = (hashCode*397) ^ Spent.GetHashCode();
-                hashCode = (hashCode*397) ^ Alloted.GetHashCode();
+                hashCode = (hashCode*397) ^ Allotted.GetHashCode();
                 return hashCode;
             }
         }
@@ -94,14 +112,13 @@ namespace SnuggleBunny.Budget.Analyzers
             return !Equals(left, right);
         }
 
-
         public override string ToString()
         {
             return String.Format("[OVERAGE] - Spending for {0} in {1} exceeded budget by {2:C} ({3:C}/{4:C})",
                 Category,
                 CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(Month),
-                Math.Abs(Alloted - Spent),
-                Alloted,
+                Math.Abs(Allotted - Spent),
+                Allotted,
                 Spent);
         }
     }

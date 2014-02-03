@@ -35,6 +35,8 @@ namespace SnuggleBunny.Budget.Config.Builders
 
         public BudgetConfigBuilder(BudgetConfig config)
         {
+            Guard.AgainstNull(config,"config");
+
             _config = config;
         }
 
@@ -43,6 +45,7 @@ namespace SnuggleBunny.Budget.Config.Builders
         /// </summary>
         /// <param name="categoryName"></param>
         /// <returns></returns>
+        [NotNull]
         public CategoryBuilder Category(string categoryName)
         {
             var builder = new CategoryBuilder(categoryName, _config);
@@ -55,6 +58,7 @@ namespace SnuggleBunny.Budget.Config.Builders
         /// <param name="amount"></param>
         public void IncomePerMonth(decimal amount)
         {
+            Guard.Requires(amount > 0,"Monthly income must be positive");
             _config.MonthlyIncome = amount;
         }
     }

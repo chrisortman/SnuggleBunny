@@ -39,11 +39,21 @@ namespace SnuggleBunny.Budget.Analyzers
     {
         private decimal _monthlyIncome;
 
+        /// <summary>
+        /// Initializes this analyzer
+        /// </summary>
+        /// <param name="config"></param>
         public void Initialize(BudgetConfig config)
         {
             _monthlyIncome = config.MonthlyIncome;
         }
 
+        /// <summary>
+        /// Analyzes the activity report for months where the spending
+        /// exceeded the available income.
+        /// </summary>
+        /// <param name="activityReport"></param>
+        /// <returns></returns>
         public IEnumerable<ISpendingAlert> Analyze(ActivityReport activityReport)
         {
             Guard.AgainstNull(activityReport,"activityReport");

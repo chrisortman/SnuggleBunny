@@ -33,7 +33,12 @@ namespace SnuggleBunny.Budget.Config
     /// </summary>
     public class BudgetConfig
     {
-        private readonly Dictionary<string, SpendingCategory> _categories = new Dictionary<string, SpendingCategory>();
+        private readonly Dictionary<string, SpendingCategory> _categories;
+
+        public BudgetConfig()
+        {
+            _categories = new Dictionary<string, SpendingCategory>();
+        }
 
         /// <summary>
         /// Total amount of all montly income.
@@ -55,6 +60,8 @@ namespace SnuggleBunny.Budget.Config
         /// <param name="limit">Spending limit</param>
         public void DefineCategory(string categoryName, decimal limit)
         {
+            Guard.Against(_categories.ContainsKey(categoryName),"Category already defined");
+
             _categories.Add(categoryName, new SpendingCategory
             {
                 Name = categoryName,

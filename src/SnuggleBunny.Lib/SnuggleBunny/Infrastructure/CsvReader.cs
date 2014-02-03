@@ -85,7 +85,9 @@ namespace SnuggleBunny.Infrastructure
             return _currentLine != null;
         }
 
-
+        /// <summary>
+        /// Disposes of this instance and the underlying reader
+        /// </summary>
         public void Dispose()
         {
             if (_innerReader != null)

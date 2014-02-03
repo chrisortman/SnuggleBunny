@@ -36,12 +36,20 @@ namespace SnuggleBunny.Budget.Config.Builders
 
         public CategoryBuilder(string categoryName, BudgetConfig config)
         {
+            Guard.AgainstNull(categoryName, "categoryName");
+            Guard.AgainstNull(config, "config");
             _categoryName = categoryName;
             _config = config;
         }
 
+        /// <summary>
+        /// Configures the spending limit for the category.
+        /// </summary>
+        /// <param name="amount"></param>
         public void LimitTo(decimal amount)
         {
+            Guard.Requires(amount > 0,"Amount should not be less than zero");
+
             _config.DefineCategory(_categoryName, amount);
         }
     }
