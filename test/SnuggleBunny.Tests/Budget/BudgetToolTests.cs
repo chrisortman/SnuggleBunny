@@ -44,7 +44,7 @@ namespace SnuggleBunny.Tests
                     c.Category("clothing").LimitTo(200M);
                 });
 
-                tool.AddAnalyzer(new OverspendInCategoryForMonthAnalyzer());
+                tool.AddAnalyzer(new CategorySpendingLimitAnalyzer());
                 var spendingReport = new ActivityReport();
                 spendingReport.AddTransaction(new DateTime(2014, 2, 2), "Gap", 201M, "clothing");
 
@@ -70,7 +70,7 @@ namespace SnuggleBunny.Tests
 
                 var alerts = tool.Analyze(spendingReport);
 
-                alerts.ShouldContain(new MonthlyIncomeExceededAlert(2,501M,500M));
+                alerts.ShouldContain(new MonthlySpendingExceededIncomeAlert(2,501M,500M));
             }
         }
     }

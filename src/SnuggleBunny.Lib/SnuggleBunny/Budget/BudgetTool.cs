@@ -23,7 +23,7 @@ namespace SnuggleBunny.Budget
             _config = loader.LoadFile(configFile);
             _analyzers = new List<ISpendingAnalyzer>()
             {
-                new OverspendInCategoryForMonthAnalyzer(),
+                new CategorySpendingLimitAnalyzer(),
                 new MonthlySpendingVersusIncomeAnalyzer(),
             };
 
@@ -33,15 +33,6 @@ namespace SnuggleBunny.Budget
         {
             _config = new BudgetConfig();
             _analyzers = new List<ISpendingAnalyzer>();
-        }
-
-        public IReadOnlyCollection<ISpendingAlert> Analyze(ActivityReport activityReport)
-        {
-            Guard.AgainstNull(activityReport,"activityReport");
-
-            _analyzers.ForEach(x => x.Initialize(_config));
-            return new ReadOnlyCollection<ISpendingAlert>(
-                _analyzers.SelectMany(x => x.Analyze(activityReport)).ToList());
         }
 
         public void Configure(Action<BudgetConfigBuilder> action)
@@ -56,6 +47,15 @@ namespace SnuggleBunny.Budget
         {
             Guard.AgainstNull(analyzer,"analyzer");
             _analyzers.Add(analyzer);
+        }
+
+        public IReadOnlyCollection<ISpendingAlert> Analyze(ActivityReport activityReport)
+        {
+            Guard.AgainstNull(activityReport,"activityReport");
+
+            _analyzers.ForEach(x => x.Initialize(_config));
+            return new ReadOnlyCollection<ISpendingAlert>(
+                _analyzers.SelectMany(x => x.Analyze(activityReport)).ToList());
         }
     }
 }

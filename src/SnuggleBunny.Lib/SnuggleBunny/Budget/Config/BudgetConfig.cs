@@ -22,12 +22,5 @@ namespace SnuggleBunny.Budget.Config
         {
             get { return _categories; }
         }
-
-        public void LoadFile(string configFile)
-        {
-            
-            DefineCategory("grocery",500M);
-            DefineCategory("clothing",200M);
-        }
     }
 }

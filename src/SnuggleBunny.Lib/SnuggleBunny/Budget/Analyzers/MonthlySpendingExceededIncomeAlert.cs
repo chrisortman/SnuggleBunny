@@ -1,15 +1,15 @@
 using System;
 using System.Globalization;
 
-namespace SnuggleBunny.Budget
+namespace SnuggleBunny.Budget.Analyzers
 {
-    public class MonthlyIncomeExceededAlert : IEquatable<MonthlyIncomeExceededAlert>, ISpendingAlert
+    public class MonthlySpendingExceededIncomeAlert : IEquatable<MonthlySpendingExceededIncomeAlert>, ISpendingAlert
     {
         private readonly int _month;
         private readonly decimal _spent;
         private readonly decimal _available;
 
-        public MonthlyIncomeExceededAlert(int month, decimal spent, decimal available)
+        public MonthlySpendingExceededIncomeAlert(int month, decimal spent, decimal available)
         {
             _month = month;
             _spent = spent;
@@ -31,7 +31,12 @@ namespace SnuggleBunny.Budget
             get { return _available; }
         }
 
-        public bool Equals(MonthlyIncomeExceededAlert other)
+        public string Describe()
+        {
+            return ToString();
+        }
+
+        public bool Equals(MonthlySpendingExceededIncomeAlert other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
@@ -43,7 +48,7 @@ namespace SnuggleBunny.Budget
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != this.GetType()) return false;
-            return Equals((MonthlyIncomeExceededAlert) obj);
+            return Equals((MonthlySpendingExceededIncomeAlert) obj);
         }
 
         public override int GetHashCode()
@@ -57,19 +62,14 @@ namespace SnuggleBunny.Budget
             }
         }
 
-        public static bool operator ==(MonthlyIncomeExceededAlert left, MonthlyIncomeExceededAlert right)
+        public static bool operator ==(MonthlySpendingExceededIncomeAlert left, MonthlySpendingExceededIncomeAlert right)
         {
             return Equals(left, right);
         }
 
-        public static bool operator !=(MonthlyIncomeExceededAlert left, MonthlyIncomeExceededAlert right)
+        public static bool operator !=(MonthlySpendingExceededIncomeAlert left, MonthlySpendingExceededIncomeAlert right)
         {
             return !Equals(left, right);
-        }
-
-        public string Describe()
-        {
-            return ToString();
         }
 
         public override string ToString()
@@ -80,5 +80,7 @@ namespace SnuggleBunny.Budget
                 Available,
                 Spent);
         }
+
+       
     }
 }
