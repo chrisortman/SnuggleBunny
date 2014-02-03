@@ -3,7 +3,7 @@ using System.IO;
 
 namespace SnuggleBunny.Infrastructure
 {
-    public class CsvReader : ICsvReader
+    public sealed class CsvReader : ICsvReader
     {
         private readonly TextReader _innerReader;
         private string _currentLine;

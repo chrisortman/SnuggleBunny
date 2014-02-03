@@ -24,7 +24,6 @@ a,2,2/4/2013,5.00,
         public void CanReadTheLines()
         {
             int lineCount = 0;
-            string line;
             while (_reader.Read())
             {
                 lineCount++;
