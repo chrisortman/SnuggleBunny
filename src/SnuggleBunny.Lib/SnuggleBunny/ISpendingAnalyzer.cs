@@ -24,11 +24,11 @@
 
 #endregion
 
-namespace SnuggleBunny.Budget
+namespace SnuggleBunny
 {
     using System.Collections.Generic;
     using Activity;
-    using Config;
+    using Budget.Config;
 
     /// <summary>
     /// Contract for analyzers to be plugged in.

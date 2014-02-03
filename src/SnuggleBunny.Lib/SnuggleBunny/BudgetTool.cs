@@ -24,15 +24,15 @@
 
 #endregion
 
-namespace SnuggleBunny.Budget
+namespace SnuggleBunny
 {
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
     using Activity;
-    using Config;
-    using Config.Builders;
+    using Budget.Config;
+    using Budget.Config.Builders;
 
     /// <summary>
     /// BudgetTool

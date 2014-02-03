@@ -24,7 +24,7 @@
 
 #endregion
 
-namespace SnuggleBunny.Budget
+namespace SnuggleBunny
 {
     /// <summary>
     /// Interface used by analyzers to provide alerts back to the <see cref="BudgetTool"/>
