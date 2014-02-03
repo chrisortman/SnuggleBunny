@@ -4,6 +4,7 @@ using NSubstitute;
 using Shouldly;
 using SnuggleBunny.Activity;
 using SnuggleBunny.Budget;
+using SnuggleBunny.Budget.Analyzers;
 using SnuggleBunny.Budget.Config;
 using Xunit;
 
@@ -43,6 +44,7 @@ namespace SnuggleBunny.Tests
                     c.Category("clothing").LimitTo(200M);
                 });
 
+                tool.AddAnalyzer(new OverspendInCategoryForMonthAnalyzer());
                 var spendingReport = new ActivityReport();
                 spendingReport.AddTransaction(new DateTime(2014, 2, 2), "Gap", 201M, "clothing");
 
@@ -59,6 +61,8 @@ namespace SnuggleBunny.Tests
                 {
                     b.IncomePerMonth(500M);
                 });
+
+                tool.AddAnalyzer(new MonthlySpendingVersusIncomeAnalyzer());
 
                 var spendingReport = new ActivityReport();
                 spendingReport.AddTransaction(new DateTime(2014,1,2),"Walmart",499M,"Grocery");
