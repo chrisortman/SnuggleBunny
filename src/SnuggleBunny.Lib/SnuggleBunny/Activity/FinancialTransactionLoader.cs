@@ -10,10 +10,14 @@ namespace SnuggleBunny.Activity
     {
         public IEnumerable<FinancialTransaction> LoadFile(string fileName)
         {
+            return Load(new FileDataSource(fileName));
+        }
 
-            if (File.Exists(fileName))
+        public IEnumerable<FinancialTransaction> Load(IFileDataSource dataSource)
+        {
+            if (dataSource.Exists())
             {
-                var parser = new FinancialTransactionCsvParser(fileName);
+                var parser = new FinancialTransactionCsvParser(dataSource.ReadCsv());
                 while (parser.HasMoreRows())
                 {
                     var transaction = parser.TryReadTransaction();
@@ -31,7 +35,6 @@ namespace SnuggleBunny.Activity
                 {
                     throw new ConfigurationErrorsException("Invalid transaction file");
                 }
-
             }
         }
     }

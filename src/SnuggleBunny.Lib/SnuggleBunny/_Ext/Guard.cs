@@ -77,7 +77,7 @@ namespace SnuggleBunny
         /// <param name="message"></param>
         [AssertionMethod]
         public static void AgainstNull([AssertionCondition(AssertionConditionType.IS_NOT_NULL)] object o,
-                                       string paramName, string message = null)
+                                       [InvokerParameterName]string paramName, string message = null)
         {
             if(o == null)
             {

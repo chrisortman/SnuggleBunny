@@ -9,7 +9,7 @@ namespace SnuggleBunny
         /// </summary>
         /// <param name="s"></param>
         /// <returns></returns>
-        public static bool IsBlank(this string s)
+        public static bool IsBlank([CanBeNull]this string s)
         {
             return String.IsNullOrWhiteSpace(s);
         }

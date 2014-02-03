@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.IO;
+using SnuggleBunny.Infrastructure;
 using YamlDotNet.RepresentationModel;
 
 namespace SnuggleBunny.Budget.Config
@@ -9,21 +10,25 @@ namespace SnuggleBunny.Budget.Config
     {
         public BudgetConfig LoadFile(string budgetConfigYml)
         {
-       
-            var config = new BudgetConfig();
 
-            if (File.Exists(budgetConfigYml))
+            return Load(new FileDataSource(budgetConfigYml));
+        }
+
+        public BudgetConfig Load(IFileDataSource dataSource)
+        {
+            var config = new BudgetConfig();
+            if (dataSource.Exists())
             {
-                using (var file = new StreamReader(budgetConfigYml))
+                using (var file = dataSource.ReadStream())
                 {
                     var yaml = new YamlStream();
                     yaml.Load(file);
 
-                    var rootNode = (YamlMappingNode) yaml.Documents[0].RootNode;
+                    var rootNode = (YamlMappingNode)yaml.Documents[0].RootNode;
 
                     try
                     {
-                        var categories = (YamlSequenceNode) rootNode.Children[new YamlScalarNode("categories")];
+                        var categories = (YamlSequenceNode)rootNode.Children[new YamlScalarNode("categories")];
                         foreach (YamlMappingNode categoryNode in categories)
                         {
                             var categoryName = categoryNode.Children[new YamlScalarNode("name")].ToString();
