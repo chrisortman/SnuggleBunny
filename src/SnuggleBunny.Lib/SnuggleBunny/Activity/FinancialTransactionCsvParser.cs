@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using SnuggleBunny.Infrastructure;
 
 namespace SnuggleBunny.Activity
@@ -9,18 +8,9 @@ namespace SnuggleBunny.Activity
         private readonly ICsvReader _csvReader;
         private static readonly string[] _fieldNames = new[] {"OccurredOn", "Description", "Amount", "Category"};
 
-        public FinancialTransactionCsvParser(string fileName)
-
-        {
-            _csvReader = new CsvReader(new StreamReader(fileName));
-        }
-
         public FinancialTransactionCsvParser(ICsvReader reader)
         {
             _csvReader = reader;
-        }
-        public FinancialTransactionCsvParser()
-        {
         }
 
         public string ErrorMessage { get; private set; }

@@ -16,20 +16,26 @@ namespace SnuggleBunny.Budget.Analyzers
 
         public IEnumerable<ISpendingAlert> Analyze(ActivityReport activityReport)
         {
-            var spendingByMonth =
-                from byMonth in activityReport.TransactionsByMonth()
-                select new
-                {
-                    Group = byMonth.Key,
-                    Total = byMonth.Sum(x => x.Amount)
-                };
+            var alerts = activityReport.GroupTransactions(By.Month)
+                                       .Select(Transactions.Totalled)
+                                       .Where(SpentExceedsIncome)
+                                       .Select(IncomeExceededAlert);
 
-            var exceeded =
-                from spent in spendingByMonth
-                where spent.Total > _monthlyIncome
-                select new MonthlyIncomeExceededAlert(spent.Group.Month, spent.Total, _monthlyIncome);
+            return alerts;                          
+              
+        }
 
-            return exceeded;
+        private MonthlySpendingExceededIncomeAlert IncomeExceededAlert(Transactions.TotalledTransactionGroup<By.MonthGroup> spent)
+        {
+            return new MonthlySpendingExceededIncomeAlert(spent.Group.Month, spent.Total, _monthlyIncome);
+        }
+
+
+        private bool SpentExceedsIncome(Transactions.TotalledTransactionGroup<By.MonthGroup> arg)
+        {
+            return arg.Total > _monthlyIncome;
         }
     }
+
+   
 }

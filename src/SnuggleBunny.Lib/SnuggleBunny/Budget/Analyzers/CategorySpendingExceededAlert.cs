@@ -1,9 +1,9 @@
 using System;
 using System.Globalization;
 
-namespace SnuggleBunny.Budget
+namespace SnuggleBunny.Budget.Analyzers
 {
-    public struct CategorySpendingExceededAlert : IEquatable<CategorySpendingExceededAlert>, ISpendingAlert
+    public class CategorySpendingExceededAlert : IEquatable<CategorySpendingExceededAlert>, ISpendingAlert
     {
 
         public string Category { get; private set; }
@@ -11,7 +11,7 @@ namespace SnuggleBunny.Budget
         public decimal Spent { get; private set;}
         public decimal Alloted { get; private set; }
 
-        public CategorySpendingExceededAlert(string category, int month, decimal spent, decimal alloted) : this()
+        public CategorySpendingExceededAlert(string category, int month, decimal spent, decimal alloted) 
         {
             Guard.AgainstNull(category,"category");
 
@@ -21,15 +21,24 @@ namespace SnuggleBunny.Budget
             Alloted = alloted;
         }
 
+        public string Describe()
+        {
+            return ToString();
+        }
+
         public bool Equals(CategorySpendingExceededAlert other)
         {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
             return string.Equals(Category, other.Category) && Month == other.Month && Spent == other.Spent && Alloted == other.Alloted;
         }
 
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
-            return obj is CategorySpendingExceededAlert && Equals((CategorySpendingExceededAlert) obj);
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((CategorySpendingExceededAlert) obj);
         }
 
         public override int GetHashCode()
@@ -46,12 +55,12 @@ namespace SnuggleBunny.Budget
 
         public static bool operator ==(CategorySpendingExceededAlert left, CategorySpendingExceededAlert right)
         {
-            return left.Equals(right);
+            return Equals(left, right);
         }
 
         public static bool operator !=(CategorySpendingExceededAlert left, CategorySpendingExceededAlert right)
         {
-            return !left.Equals(right);
+            return !Equals(left, right);
         }
 
 
@@ -63,11 +72,6 @@ namespace SnuggleBunny.Budget
                 Math.Abs(Alloted-Spent),
                 Alloted,
                 Spent);
-        }
-
-        public string Describe()
-        {
-            return ToString();
         }
     }
 }

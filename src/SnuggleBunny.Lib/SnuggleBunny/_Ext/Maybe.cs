@@ -1,9 +1,12 @@
-﻿namespace SnuggleBunny
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace SnuggleBunny
 {
     /// <summary>
     /// Encapsulates optional references. Prevent NULL refrence exceptions
     /// </summary>
     /// <typeparam name="T"></typeparam>
+    [ExcludeFromCodeCoverage]
     public struct Maybe<T>
     {
         public readonly static Maybe<T> Nothing = new Maybe<T>();
@@ -37,6 +40,7 @@
         }
     }
 
+    [ExcludeFromCodeCoverage]
     public static class Maybe
     {
         public static bool IsSomething<T>(this Maybe<T> a)
