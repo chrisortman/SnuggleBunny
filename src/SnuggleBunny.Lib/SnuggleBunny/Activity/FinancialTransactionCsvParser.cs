@@ -20,7 +20,7 @@ namespace SnuggleBunny.Activity
             return !_csvReader.EOF;
         }
 
-        public Maybe<FinancialTransaction> TryReadTransaction()
+        public Maybe<FinancialTransaction> MaybeReadTransaction()
         {
             if (_csvReader.Read())
             {

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using SnuggleBunny.Activity;
-using SnuggleBunny.Budget.Analyzers;
 using SnuggleBunny.Budget.Config;
 using SnuggleBunny.Budget.Config.Builders;
 
@@ -21,11 +20,7 @@ namespace SnuggleBunny.Budget
 
             var loader = new BudgetConfigLoader();
             _config = loader.LoadFile(configFile);
-            _analyzers = new List<ISpendingAnalyzer>()
-            {
-                new CategorySpendingLimitAnalyzer(),
-                new MonthlySpendingVersusIncomeAnalyzer(),
-            };
+            _analyzers = new List<ISpendingAnalyzer>();
 
         }
 

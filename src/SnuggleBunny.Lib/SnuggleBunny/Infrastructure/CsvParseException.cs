@@ -6,7 +6,7 @@ namespace SnuggleBunny.Infrastructure
     [Serializable]
     public class CsvParseException : Exception
     {
-        private int _fieldIndex;
+        private readonly int _fieldIndex;
 
         public CsvParseException(string message, int fieldIndex) : base(message)
         {
